@@ -2,7 +2,15 @@ class MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
   def latest
-    @messages = Message.by_group_ids(params[:id].map{|id| id[:group]}.map(&:to_i))
+    # receive codes corresponding to a student
+    codes = params[:id].map{|id| id[:codes]}
+
+    # find the group based on the given codes
+    students = Student.by_codes(codes)
+    groups = students.map{ |s| s.groups }.flatten
+
+    # find messages based on the groups found
+    @messages = Message.by_group_ids(groups)
     render json: @messages
   end
 
