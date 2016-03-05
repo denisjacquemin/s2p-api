@@ -2,7 +2,6 @@ class MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
 
   def latest
-    byebug
     @messages = Message.by_group_ids(params[:id].map{|id| id[:group]}.map(&:to_i))
     render json: @messages
   end
