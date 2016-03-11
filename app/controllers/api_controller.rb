@@ -1,11 +1,10 @@
 class ApiController < ApplicationController
   def code_label
     code_label = Student.by_codes(params[:code])
-    message = ''
-    if code_label
+    message = 'Code erroné'
+    if code_label.first
       message = code_label.first.fullname
-    else
-      message = 'Code erroné'
+    end
     render json: message
   end
 end
