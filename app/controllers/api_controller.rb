@@ -15,7 +15,7 @@ class ApiController < ApplicationController
     @messages = Message.published.by_group_ids(groups).since(last_update).order(publish_date: :desc)
 
     # if no message found get the 10 latest messages
-    if (@messages.empty)
+    if (@messages.any?)
       @messages = Message.published.by_group_ids(groups).order(publish_date: :desc).limit(10)
     end
 
