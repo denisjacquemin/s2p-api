@@ -1,4 +1,5 @@
 class Message < ApplicationRecord
+  has_many :mfiles
 
   scope :published, -> { where.not(publish_date: nil) }
   scope :by_group_ids, ->(group_ids) { where("groups && ARRAY[?]::integer[]", group_ids) }

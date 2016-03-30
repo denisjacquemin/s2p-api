@@ -12,14 +12,14 @@ class ApiController < ApplicationController
 
     last_update = params[:last_update]
     # find messages based on the groups found
-    @messages = Message.published.by_group_ids(groups).since(last_update).order(publish_date: :desc)
+    @messages = Message.published.by_group_ids(groups).since(last_update).includes(:mfiles).order(publish_date: :desc)
 
     # if no message found get the 10 latest messages
     unless (@messages.any?)
-      @messages = Message.published.by_group_ids(groups).order(publish_date: :desc).limit(10)
+      @messages = Message.published.by_group_ids(groups).includes(:mfiles).order(publish_date: :desc).limit(10)
     end
 
-    render json: @messages
+    render json: @messages.to_json(:include => :mfiles)
   end
 
   def code_label
