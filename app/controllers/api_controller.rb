@@ -1,6 +1,5 @@
 class ApiController < ApplicationController
 
-  # /messages?last_update=2016-03-16&codes[]=123456&codes[]=7KGWpG"
   def messages
     # receive codes corresponding to a student
     #codes = params[:codes].map{|code| {code: code[:code], latest_update: code[:latest_update]}}
@@ -9,17 +8,22 @@ class ApiController < ApplicationController
     # find the group based on the given codes
     students = Student.by_codes(codes)
     groups = students.map{ |s| s.groups }.flatten
-
     last_update = params[:last_update]
     # find messages based on the groups found
-    @messages = Message.published.by_group_ids(groups).since(last_update).includes(:mfiles).order(publish_date: :desc)
+    @messages =   Message.published.by_group_ids(groups).includes(:mfiles).order(publish_date: :desc).limit(30)
 
-    # if no message found get the 10 latest messages
-    unless (@messages.any?)
-      @messages = Message.published.by_group_ids(groups).includes(:mfiles).order(publish_date: :desc).limit(10)
-    end
+    # add student firstname targeted for each message
+    @messages_with_students = @messages.map { |m|
 
-    render json: @messages.to_json(:include => :mfiles)
+      list_of_students = students.map { |s|
+        s.firstname if (!(s.groups & m.groups).empty?)
+      }
+
+      m.students = list_of_students
+      m
+    }
+
+    render json: @messages_with_students.to_json(:include => :mfiles)
   end
 
   def code_label
