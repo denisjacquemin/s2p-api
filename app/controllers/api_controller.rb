@@ -26,6 +26,15 @@ class ApiController < ApplicationController
     render json: @messages_with_students.to_json(:include => :mfiles)
   end
 
+  def get_fullname_by_code
+    s = Student.by_codes(params[:code]).first
+    if s.nil?
+      render 	:no_content, json: {message: 'nothing found'}
+    else
+      render json: {code: params[:code], fullname: s.fullname}
+    end
+  end
+
   def code_label
     code_label = Student.by_codes(params[:code])
     message = 'Code erroné'
