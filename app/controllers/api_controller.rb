@@ -15,10 +15,9 @@ class ApiController < ApplicationController
     # add student firstname targeted for each message
     @messages_with_students = @messages.map { |m|
 
-      list_of_students = students.map { |s|
+      list_of_students = students.select { |s|
         s.firstname if (!(s.groups & m.groups).empty?)
       }
-
       m.students = list_of_students
       m
     }
