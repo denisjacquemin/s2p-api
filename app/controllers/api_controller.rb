@@ -18,7 +18,7 @@ class ApiController < ApplicationController
       list_of_students = students.collect { |s|
         s.firstname if (!(s.groups & m.groups).empty?)
       }
-      m.students = list_of_students
+      m.students = list_of_students.compact
       m
     }
 
