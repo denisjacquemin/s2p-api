@@ -1,2 +1,2 @@
-class Mfile < ApplicationRecord
+class Device < ApplicationRecord
 end
