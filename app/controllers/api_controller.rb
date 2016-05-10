@@ -34,6 +34,12 @@ class ApiController < ApplicationController
     end
   end
 
+def link_code_to_device
+    device = Device.find_or_create_by(token: params[:token])
+    device.codes << params[:code]
+    render nothing: true
+  end
+
   def code_label
     code_label = Student.by_codes(params[:code])
     message = 'Code erroné'

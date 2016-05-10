@@ -1,0 +1,2 @@
+class Mfile < ApplicationRecord
+end
