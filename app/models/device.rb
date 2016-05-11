@@ -5,7 +5,8 @@ class Device < ApplicationRecord
 # http://www.postgresql.org/docs/current/static/arrays.html
 # http://www.postgresql.org/docs/current/static/functions-array.html
 def add_code(code)
-  self.update_all(['codes = array_append(codes, ?)', code])
+  #self.update_all(['codes = array_append(codes, ?)', code])
+  Device.where(token: self.token).update_all(['codes = array_append(codes, ?)', code])
 end
 
 # def self.remove_group(student_ids, group_ids)
