@@ -38,6 +38,7 @@ def link_code_to_device
     puts params.inspect
     device = Device.find_or_create_by(token: params[:token])
     device.codes << params[:code]
+    device.save
     render nothing: true
   end
 
