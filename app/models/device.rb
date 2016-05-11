@@ -10,7 +10,7 @@ def add_code(code)
 end
 
 def remove_code(code)
-  Device.where(token: self.token).update_all['codes = array_remove(codes, ?)', code])
+  Device.where(token: self.token).update_all(['codes = array_remove(codes, ?)', code])
 end
 
 # def self.remove_group(student_ids, group_ids)
