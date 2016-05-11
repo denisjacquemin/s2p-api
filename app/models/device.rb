@@ -4,7 +4,7 @@ class Device < ApplicationRecord
 # http://stackoverflow.com/questions/24236871/in-rails-how-to-add-an-element-to-an-array-type-attribute-for-all-records
 # http://www.postgresql.org/docs/current/static/arrays.html
 # http://www.postgresql.org/docs/current/static/functions-array.html
-def self.add_code(code)
+def add_code(code)
   self.update_all(['codes = array_append(codes, ?)', code])
 end
 
