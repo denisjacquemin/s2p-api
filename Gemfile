@@ -12,7 +12,8 @@ gem 'rack-cors', :require => 'rack/cors'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.0'
 # Action Cable dependencies for the Redis adapter
-gem 'redis', '~> 3.0'
+#gem 'redis', '~> 3.0'
+gem 'browser'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

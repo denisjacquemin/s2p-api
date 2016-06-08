@@ -36,6 +36,9 @@ class ApiController < ApplicationController
 
   def link_code_to_device
     device = Device.find_or_create_by(token: params[:token])
+    device.platform = :android
+    device.platform = :ios if browser.platform.ios?
+    device.notification_platform = browser.platform
     device.add_code(params[:code])
     render nothing: true
   end
