@@ -13,6 +13,14 @@ def remove_code(code)
   Device.where(token: self.token).update_all(['codes = array_remove(codes, ?)', code])
 end
 
+def disable
+  self.update(active: false)
+end
+
+def enable
+  self.update(active: true)
+end
+
 # def self.remove_group(student_ids, group_ids)
 #   Student.by_ids(student_ids).update_all(['groups = array_remove(groups, ?)', group_ids])
 # end

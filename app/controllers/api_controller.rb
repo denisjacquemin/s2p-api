@@ -14,13 +14,13 @@ class ApiController < ApplicationController
 
     # add student firstname targeted for each message
     @messages_with_students = @messages.map { |m|
-
       list_of_students = students.collect { |s|
         s.firstname if (!(s.groups & m.groups).empty?)
       }
       m.students = list_of_students.compact
       m
     }
+
 
     render json: @messages_with_students.to_json(:include => :mfiles)
   end
@@ -44,6 +44,20 @@ class ApiController < ApplicationController
     device = Device.find_by token: params[:token]
     device.remove_code(params[:code]) unless device.nil?
     render nothing: true
+  end
+
+  def disabledevicenotifictation
+    device = Device.find_by_token(params[:token])
+    unless device.nil?
+      device.disable
+    end
+  end
+
+  def enabledevicenotifictation
+    device = Device.find_by_token(params[:token])
+    unless device.nil?
+      device.enable
+    end
   end
 
   def code_label
