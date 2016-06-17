@@ -18,8 +18,14 @@ class ApiController < ApplicationController
         s.firstname if (!(s.groups & m.groups).empty?)
       }
       m.students = list_of_students.compact
+      m.signature = {
+        fullname: 'Jean-Marie Lobet',
+        function: 'Directeur'
+      }
       m
     }
+
+
 
 
     render json: @messages_with_students.to_json(:include => :mfiles)
