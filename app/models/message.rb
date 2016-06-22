@@ -1,10 +1,10 @@
 class Message < ApplicationRecord
   has_many :mfiles
 
+  # http://stackoverflow.com/questions/6892044/add-virtual-attribute-to-json-output
   attr_accessor :students, :signature
   def attributes
-    super.merge('students' => self.students)
-    super.merge('signature' => self.signature)
+    super.merge('students' => self.students, 'signature' => self.signature)
   end
 
 

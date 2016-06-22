@@ -25,9 +25,6 @@ class ApiController < ApplicationController
       m
     }
 
-
-
-
     render json: @messages_with_students.to_json(:include => :mfiles)
   end
 
