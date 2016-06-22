@@ -19,8 +19,9 @@ class ApiController < ApplicationController
       }
       m.students = list_of_students.compact
       m.signature = {
-        fullname: 'Jean-Marie Lobet',
-        function: 'Directeur'
+        fullname: m.author.fullname,
+        function: m.author.function,
+        schoolname: m.school.name
       }
       m
     }
