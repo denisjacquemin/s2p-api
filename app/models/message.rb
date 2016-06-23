@@ -1,5 +1,6 @@
 class Message < ApplicationRecord
   has_many :mfiles
+  belongs_to :school
   belongs_to :author, class_name: "User"
 
   # http://stackoverflow.com/questions/6892044/add-virtual-attribute-to-json-output
