@@ -41,7 +41,7 @@ class ApiController < ApplicationController
   end
 
   def link_code_to_device
-    device = Device.find_or_create_by(token: params[:token], platform: params[:platform])
+    device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
     device.add_code(params[:code])
     render nothing: true
   end
@@ -53,14 +53,14 @@ class ApiController < ApplicationController
   end
 
   def disabledevicenotifictation
-    device = Device.find_by_uuid(params[:uuid])
+    device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
     unless device.nil?
       device.disable
     end
   end
 
   def enabledevicenotifictation
-    device = Device.find_by_uuid(params[:uuid])
+    device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
     unless device.nil?
       device.enable
     end
