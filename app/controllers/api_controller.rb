@@ -53,14 +53,14 @@ class ApiController < ApplicationController
   end
 
   def disabledevicenotifictation
-    device = Device.find_by_token(params[:token])
+    device = Device.find_by_uuid(params[:uuid])
     unless device.nil?
       device.disable
     end
   end
 
   def enabledevicenotifictation
-    device = Device.find_by_token(params[:token])
+    device = Device.find_by_uuid(params[:uuid])
     unless device.nil?
       device.enable
     end
