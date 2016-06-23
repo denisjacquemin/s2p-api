@@ -21,7 +21,9 @@ class ApiController < ApplicationController
       m.signature = {
         fullname: m.author.fullname,
         function: m.author.function,
-        schoolname: m.school.name
+        schoolname: m.school.name,
+        address: m.school.address,
+        phone: [m.school.phone, m.school.url, m.author.email].join('-')
       }
       m
     }
