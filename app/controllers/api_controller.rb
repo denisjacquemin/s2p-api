@@ -43,13 +43,13 @@ class ApiController < ApplicationController
   def link_code_to_device
     device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
     device.add_code(params[:code])
-    render nothing: true
+    render json: {res: 'ok'}
   end
 
   def unlink_code_to_device
     device = Device.find_by token: params[:token]
     device.remove_code(params[:code]) unless device.nil?
-    render nothing: true
+    render json: {res: 'ok'}
   end
 
   def disabledevicenotifictation
