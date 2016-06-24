@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'unlinkcodetodevice', to: 'api#unlink_code_to_device'
   get 'disabledevicenotifictation', to: 'api#disabledevicenotifictation'
   get 'enabledevicenotifictation', to: 'api#enabledevicenotifictation'
+  get 'saveregistrationid', to: 'api#saveregistrationid'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 

@@ -52,6 +52,11 @@ class ApiController < ApplicationController
     render json: {res: 'ok'}
   end
 
+  def saveregistrationid
+    device = Device.find_by_uuid(params[:uuid])
+    device.update(registration_id: params[:registrationid])
+  end
+
   def disabledevicenotifictation
     device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
     unless device.nil?
