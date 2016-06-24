@@ -57,6 +57,7 @@ class ApiController < ApplicationController
     unless device.nil?
       device.disable
     end
+    render json: {res: 'ok'}
   end
 
   def enabledevicenotifictation
@@ -64,6 +65,7 @@ class ApiController < ApplicationController
     unless device.nil?
       device.enable
     end
+    render json: {res: 'ok'}
   end
 
   def code_label
