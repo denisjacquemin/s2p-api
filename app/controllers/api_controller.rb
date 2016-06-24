@@ -23,8 +23,9 @@ class ApiController < ApplicationController
         function: m.author.function,
         schoolname: m.school.name,
         address: m.school.address,
-        phone: [m.school.phone, m.school.url, m.author.email].join('-')
+        contact: [m.school.phone, m.school.url, m.author.email].join(' - ')
       }
+      byebug
       m
     }
 
