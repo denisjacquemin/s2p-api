@@ -4,10 +4,15 @@ class ApiController < ApplicationController
     # receive codes corresponding to a student
     #codes = params[:codes].map{|code| {code: code[:code], latest_update: code[:latest_update]}}
     codes = params[:codes]
+    student_codes = codes.select {|code| code.start_with('s')}
+    group_codes = codes.select {|code| code.start_with('g')}
 
-    # find the group based on the given codes
-    students = Student.by_codes(codes)
+    # find the group based on the given codes for students
+    students = Student.by_codes(student_codes)
     groups = students.map{ |s| s.groups }.flatten
+
+    groups = groups + group_codes
+
     last_update = params[:last_update]
     # find messages based on the groups found
     @messages =   Message.published.by_group_ids(groups).includes(:mfiles).order(publish_date: :desc).limit(30)
@@ -58,7 +63,7 @@ class ApiController < ApplicationController
 
   def saveregistrationid
     device = Device.find_by_uuid(params[:uuid])
-    device.update(registration_id: params[:rid])
+    device.update(registration_id: params[:rid]) unless device.nil?
     render json: {res: 'ok'}
   end
 
