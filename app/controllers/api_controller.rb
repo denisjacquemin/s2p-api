@@ -39,7 +39,7 @@ class ApiController < ApplicationController
       name = s.fullname unless s.nil?
     elsif params[:code].start_with?("g")
       g = Group.by_codes(params[:code]).first
-      name = s.name unless g.nil?
+      name = g.name unless g.nil?
     end
     render json: {code: params[:code], fullname: name}
   end
