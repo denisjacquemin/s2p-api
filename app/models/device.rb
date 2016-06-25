@@ -1,5 +1,7 @@
 class Device < ApplicationRecord
 
+  validates :uuid, uniqueness: true
+
   enum notification_platform: [:ios, :android]
 
   # http://stackoverflow.com/questions/24236871/in-rails-how-to-add-an-element-to-an-array-type-attribute-for-all-records
