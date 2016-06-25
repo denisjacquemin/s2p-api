@@ -51,7 +51,7 @@ class ApiController < ApplicationController
   end
 
   def unlink_code_to_device
-    device = Device.find_by token: params[:token]
+    device = Device.find_by uuid: params[:uuid]
     device.remove_code(params[:code]) unless device.nil?
     render json: {res: 'ok'}
   end
