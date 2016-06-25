@@ -63,7 +63,14 @@ class ApiController < ApplicationController
 
   def saveregistrationid
     device = Device.find_by_uuid(params[:uuid])
-    device.update(registration_id: params[:rid]) unless device.nil?
+    puts 'saveregistrationid: ' + device.inspect
+    if device.update(registration_id: params[:rid]) unless device.nil?
+      puts 'save ok'
+    else
+      puts 'save not ok'
+    end
+
+
     render json: {res: 'ok'}
   end
 
