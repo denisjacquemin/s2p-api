@@ -33,12 +33,15 @@ class ApiController < ApplicationController
   end
 
   def get_fullname_by_code
-    s = Student.by_codes(params[:code]).first
-    if s.nil?
-      render 	:no_content, json: {message: 'nothing found'}
-    else
-      render json: {code: params[:code], fullname: s.fullname}
+    name = 'nothing found'
+    if params[:code].start_with?("s")
+      s = Student.by_codes(params[:code]).first
+      name = s.fullname unless s.nil?
+    elsif params[:code].start_with?("g")
+      g = Group.by_codes(params[:code]).first
+      name = s.name unless g.nil?
     end
+    render json: {code: params[:code], fullname: name}
   end
 
   def link_code_to_device
