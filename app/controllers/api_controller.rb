@@ -30,7 +30,6 @@ class ApiController < ApplicationController
         address: m.school.address,
         contact: [m.school.phone, m.school.url, m.author.email].join(' - ')
       }
-      byebug
       m
     }
 
