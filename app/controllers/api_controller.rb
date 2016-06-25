@@ -9,20 +9,25 @@ class ApiController < ApplicationController
 
     # find the group based on the given codes for students
     students = Student.by_codes(student_codes)
-    groups = students.map{ |s| s.groups }.flatten
+    groups = Group.by_codes(group_codes)
 
-    groups = groups + group_codes.map{|g| Group.find_by_code(g).id}.flatten
+    groups_ids = (students.map{ |s| s.groups } + groups).flatten
 
     last_update = params[:last_update]
     # find messages based on the groups found
-    @messages =   Message.published.by_group_ids(groups).includes(:mfiles).order(publish_date: :desc).limit(30)
+    @messages =   Message.published.by_group_ids(groups_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
 
     # add student firstname targeted for each message
     @messages_with_students = @messages.map { |m|
       list_of_students = students.collect { |s|
         s.firstname if (!(s.groups & m.groups).empty?)
       }
-      m.students = list_of_students.compact
+      list_of_groups = groups.collect { |g|
+        g.name
+      }
+
+
+      m.students = list_of_students.compact + list_of_groups.compact
       m.signature = {
         fullname: m.author.fullname,
         function: m.author.function,
