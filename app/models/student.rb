@@ -1,4 +1,5 @@
 class Student < ApplicationRecord
+  before_save     :downcase_code
 
   scope :by_codes, ->(codes) { where(code: codes) }
 
@@ -6,7 +7,8 @@ class Student < ApplicationRecord
     "#{self.firstname} #{self.lastname}"
   end
 
-  def code
-    self.code.downcase
-  end
+  private
+      def downcase_code
+        self.code.downcase!
+      end
 end
