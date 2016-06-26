@@ -43,25 +43,28 @@ class ApiController < ApplicationController
 
   def get_fullname_by_code
     name = 'nothing found'
-    if params[:code].start_with?("s")
-      s = Student.by_codes(params[:code]).first
+    code = params[:code].downcase
+    if code.start_with?("s")
+      s = Student.by_codes(code).first
       name = s.fullname unless s.nil?
-    elsif params[:code].start_with?("g")
-      g = Group.by_codes(params[:code]).first
+    elsif code.start_with?("g")
+      g = Group.by_codes(code).first
       name = g.name unless g.nil?
     end
-    render json: {code: params[:code], fullname: name}
+    render json: {code: code, fullname: name}
   end
 
   def link_code_to_device
+    code = params[:code].downcase
     device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
-    device.add_code(params[:code])
+    device.add_code(code)
     render json: {res: 'ok'}
   end
 
   def unlink_code_to_device
+    code = params[:code].downcase
     device = Device.find_by uuid: params[:uuid]
-    device.remove_code(params[:code]) unless device.nil?
+    device.remove_code(code) unless device.nil?
     render json: {res: 'ok'}
   end
 
@@ -95,7 +98,8 @@ class ApiController < ApplicationController
   end
 
   def code_label
-    code_label = Student.by_codes(params[:code])
+    code = params[:code].downcase
+    code_label = Student.by_codes(code)
     message = 'Code erroné'
     if code_label.first N7ljVx
       message = code_label.first.fullname
