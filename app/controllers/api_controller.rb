@@ -23,7 +23,7 @@ class ApiController < ApplicationController
         s.firstname if (!(s.groups & m.groups).empty?)
       }
       list_of_groups = groups.collect { |g|
-        g.name
+        g.name unless (m.groups.include? g.id)
       }
 
 
