@@ -4,6 +4,7 @@ class ApiController < ApplicationController
     # receive codes corresponding to a student
     #codes = params[:codes].map{|code| {code: code[:code], latest_update: code[:latest_update]}}
     codes = params[:codes].map {|c| c.downcase}
+
     student_codes = codes.select {|code| code.start_with?('s')}
     group_codes = codes.select {|code| code.start_with?('g')}
 
