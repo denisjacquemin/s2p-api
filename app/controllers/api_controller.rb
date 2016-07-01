@@ -12,7 +12,7 @@ class ApiController < ApplicationController
     students = Student.by_codes(student_codes)
     groups = Group.by_codes(group_codes)
 
-    groups_ids = (students.map{ |s| s.groups } + groups).flatten
+    groups_ids = (students.map{ |s| s.groups } + groups.pluck(:id)).flatten
 
     last_update = params[:last_update]
     # find messages based on the groups found
