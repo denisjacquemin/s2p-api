@@ -5,7 +5,7 @@ class ApiController < ApplicationController
     #codes = params[:codes].map{|code| {code: code[:code], latest_update: code[:latest_update]}}
     codes = params[:codes].map {|c| c.downcase}
 
-    student_codes = codes.select {|code| code.start_with?('s')}
+    student_codes = codes.select {|code| code.start_with?('s')} # get all students' codes from querystring
     group_codes = codes.select {|code| code.start_with?('g')}
 
     # find the group based on the given codes for students
@@ -37,6 +37,7 @@ class ApiController < ApplicationController
         url: m.school.url,
         email: m.author.email,
         phone: m.school.phone
+        logo_url: m.school.file_url
       }
       m
     }
