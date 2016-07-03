@@ -36,7 +36,7 @@ class ApiController < ApplicationController
         address: m.school.address,
         url: m.school.url,
         email: m.author.email,
-        phone: m.school.phone
+        phone: m.school.phone,
         logo_url: m.school.file_url
       }
       m
