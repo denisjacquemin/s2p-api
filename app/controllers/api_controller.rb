@@ -67,7 +67,7 @@ class ApiController < ApplicationController
     device.add_code(code)
 
     if code.start_with?("s")
-      Student.by_code(code).follow
+      Student.by_code(code).first.follow
     end
 
     render json: {res: 'ok'}
@@ -79,7 +79,7 @@ class ApiController < ApplicationController
     device.remove_code(code) unless device.nil?
 
     if code.start_with?("s")
-      Student.by_code(code).unfollow
+      Student.by_code(code).first.unfollow
     end
 
     render json: {res: 'ok'}
