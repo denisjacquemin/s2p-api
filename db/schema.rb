@@ -11,29 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160516052014) do
+ActiveRecord::Schema.define(version: 20160704114044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "alerts", force: :cascade do |t|
-    t.string   "title"
-    t.string   "when"
-    t.string   "body"
-    t.integer  "school_id"
-    t.datetime "publish_date"
-    t.integer  "author_id"
-    t.integer  "status"
-    t.integer  "groups",       default: [],              array: true
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
   create_table "devices", force: :cascade do |t|
     t.string   "token"
-    t.string   "codes",      default: [],              array: true
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.string   "codes",           default: [],                array: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.boolean  "active",          default: true
+    t.string   "platform"
+    t.string   "uuid"
+    t.string   "registration_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -42,6 +33,7 @@ ActiveRecord::Schema.define(version: 20160516052014) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "school_id"
+    t.string   "code"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -89,9 +81,8 @@ ActiveRecord::Schema.define(version: 20160516052014) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "app_id"
+    t.index ["device_token"], name: "index_rpush_feedback_on_device_token", using: :btree
   end
-
-  add_index "rpush_feedback", ["device_token"], name: "index_rpush_feedback_on_device_token", using: :btree
 
   create_table "rpush_notifications", force: :cascade do |t|
     t.integer  "badge"
@@ -124,29 +115,21 @@ ActiveRecord::Schema.define(version: 20160516052014) do
     t.string   "category"
     t.boolean  "content_available",            default: false
     t.text     "notification"
+    t.index ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
   end
-
-  add_index "rpush_notifications", ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
 
   create_table "schools", force: :cascade do |t|
     t.string   "name"
     t.string   "address"
     t.string   "phone"
     t.string   "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.boolean  "validation_workflow_active", default: true
+    t.string   "url"
+    t.string   "filename"
+    t.string   "file_url"
   end
-
-  create_table "settings", force: :cascade do |t|
-    t.string   "var",                   null: false
-    t.text     "value"
-    t.integer  "thing_id"
-    t.string   "thing_type", limit: 30
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true, using: :btree
 
   create_table "students", force: :cascade do |t|
     t.string   "firstname"
@@ -158,6 +141,7 @@ ActiveRecord::Schema.define(version: 20160516052014) do
     t.string   "code"
     t.string   "classroom"
     t.string   "level"
+    t.boolean  "followed"
   end
 
   create_table "users", force: :cascade do |t|
@@ -187,14 +171,15 @@ ActiveRecord::Schema.define(version: 20160516052014) do
     t.string   "invited_by_type"
     t.integer  "invited_by_id"
     t.integer  "invitations_count",      default: 0
-    t.integer  "school_id"
     t.datetime "deleted_at"
+    t.integer  "schools",                default: [],              array: true
+    t.string   "function"
+    t.string   "code"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
+    t.index ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
-  add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
-  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

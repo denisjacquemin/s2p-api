@@ -65,6 +65,11 @@ class ApiController < ApplicationController
     code = params[:code].downcase
     device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
     device.add_code(code)
+
+    if code.start_with?("s")
+      Student.by_code(code).follow
+    end
+
     render json: {res: 'ok'}
   end
 
@@ -72,6 +77,11 @@ class ApiController < ApplicationController
     code = params[:code].downcase
     device = Device.find_by uuid: params[:uuid]
     device.remove_code(code) unless device.nil?
+
+    if code.start_with?("s")
+      Student.by_code(code).unfollow
+    end
+
     render json: {res: 'ok'}
   end
 
