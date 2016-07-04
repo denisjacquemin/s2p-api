@@ -10,10 +10,12 @@ class Student < ApplicationRecord
 
   def follow
     self.increment(:followers)
+    self.save
   end
 
   def unfollow
     self.decrement(:followers)
+    self.save
   end
 
   private
