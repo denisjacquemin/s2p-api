@@ -63,9 +63,8 @@ class ApiController < ApplicationController
 
   def link_code_to_device
     code = params[:code].downcase
-    device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
+    device = Device.find_or_create_by(uuid: params[:uuid])
     device.add_code(code)
-
     if code.start_with?("s")
       Student.by_code(code).first.follow
     end
@@ -88,7 +87,7 @@ class ApiController < ApplicationController
   def saveregistrationid
     device = Device.find_or_create_by(uuid: params[:uuid])
     puts 'saveregistrationid: ' + device.inspect
-    if device.update(registration_id: params[:rid])
+    if device.update(registration_id: params[:rid], platform: params[:platform])
       puts 'save ok'
     else
       puts 'save not ok'
