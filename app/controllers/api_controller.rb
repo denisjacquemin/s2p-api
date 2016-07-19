@@ -63,7 +63,11 @@ class ApiController < ApplicationController
 
   def link_code_to_device
     code = params[:code].downcase
-    device = Device.find_or_create_by(uuid: params[:uuid])
+    begin
+      device = Device.find_or_create_by(uuid: params[:uuid])
+    rescue ActiveRecord::RecordNotUnique
+      retry
+    end
     device.add_code(code)
     if code.start_with?("s")
       Student.by_code(code).first.follow
@@ -85,7 +89,11 @@ class ApiController < ApplicationController
   end
 
   def saveregistrationid
-    device = Device.find_or_create_by(uuid: params[:uuid])
+    begin
+      device = Device.find_or_create_by(uuid: params[:uuid])
+    rescue ActiveRecord::RecordNotUnique
+      retry
+    end
     device.registration_id = params[:rid]
     device.platform = params[:platform]
 
@@ -99,7 +107,11 @@ class ApiController < ApplicationController
   end
 
   def disabledevicenotifictation
-    device = Device.find_or_create_by(uuid: params[:uuid])
+    begin
+      device = Device.find_or_create_by(uuid: params[:uuid])
+    rescue ActiveRecord::RecordNotUnique
+      retry
+    end
     device.platform = params[:platform]
     device.disable
     if device.save
@@ -112,7 +124,11 @@ class ApiController < ApplicationController
   end
 
   def enabledevicenotifictation
-    device = Device.find_or_create_by(uuid: params[:uuid])
+    begin
+      device = Device.find_or_create_by(uuid: params[:uuid])
+    rescue ActiveRecord::RecordNotUnique
+      retry
+    end
     device.platform = params[:platform]
     device.enable
     if device.save
