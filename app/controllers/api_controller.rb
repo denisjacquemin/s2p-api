@@ -86,14 +86,12 @@ class ApiController < ApplicationController
 
   def saveregistrationid
     device = Device.find_or_create_by(uuid: params[:uuid])
-    puts 'saveregistrationid: ' + device.inspect
     if device.update(registration_id: params[:rid], platform: params[:platform])
-      puts 'save ok'
+      logger.info "Registartion ID (#{device.registration_id}) saved for #{device.uuid}, platform #{device.platform}"
     else
-      puts 'save not ok'
+      logger.info "Error when saving Registration ID"
+      logger.error "Error when saving Registration ID (#{params[:rid]}) for #{params[:uuid]}, platform #{params[:platform]}"
     end
-
-
     render json: {res: 'ok'}
   end
 
