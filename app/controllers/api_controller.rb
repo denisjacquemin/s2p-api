@@ -99,17 +99,27 @@ class ApiController < ApplicationController
   end
 
   def disabledevicenotifictation
-    device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
-    unless device.nil?
-      device.disable
+    device = Device.find_or_create_by(uuid: params[:uuid])
+    device.platform = params[:platform]
+    device.disable
+    if device.save
+      logger.info "Disabling device notification for #{device.uuid} done"
+    else
+      logger.error "Error when Disabling device notification for #{params[:uuid]}"
+      logger.error device.errors.inspect
     end
     render json: {res: 'ok'}
   end
 
   def enabledevicenotifictation
-    device = Device.find_or_create_by(uuid: params[:uuid], platform: params[:platform])
-    unless device.nil?
-      device.enable
+    device = Device.find_or_create_by(uuid: params[:uuid])
+    device.platform = params[:platform]
+    device.enable
+    if device.save
+      logger.info "Enabling device notification for #{device.uuid} done"
+    else
+      logger.error "Error when Enabling device notification for #{params[:uuid]}"
+      logger.error device.errors.inspect
     end
     render json: {res: 'ok'}
   end
