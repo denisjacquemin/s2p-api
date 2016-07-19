@@ -89,8 +89,8 @@ class ApiController < ApplicationController
     if device.update(registration_id: params[:rid], platform: params[:platform])
       logger.info "Registartion ID (#{device.registration_id}) saved for #{device.uuid}, platform #{device.platform}"
     else
-      logger.info "Error when saving Registration ID"
       logger.error "Error when saving Registration ID (#{params[:rid]}) for #{params[:uuid]}, platform #{params[:platform]}"
+      logger.error update.errors
     end
     render json: {res: 'ok'}
   end
