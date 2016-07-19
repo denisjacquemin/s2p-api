@@ -86,7 +86,7 @@ class ApiController < ApplicationController
 
   def saveregistrationid
     device = Device.find_or_create_by(uuid: params[:uuid])
-    if device.update(registration_id: params[:rid], platform: params[:platform])
+    if device.update_all(registration_id: params[:rid], platform: params[:platform])
       logger.info "Registartion ID (#{device.registration_id}) saved for #{device.uuid}, platform #{device.platform}"
     else
       logger.error "Error when saving Registration ID (#{params[:rid]}) for #{params[:uuid]}, platform #{params[:platform]}"
