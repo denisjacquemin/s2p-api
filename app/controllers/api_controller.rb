@@ -16,7 +16,7 @@ class ApiController < ApplicationController
 
     last_update = params[:last_update]
     # find messages based on the groups found
-    @messages =   Message.published.by_group_ids(groups_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
+    @messages =   Message.published.for_app.by_group_ids(groups_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
 
     # add student firstname targeted for each message
     @messages_with_students = @messages.map { |m|
