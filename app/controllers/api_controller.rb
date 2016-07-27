@@ -5,44 +5,49 @@ class ApiController < ApplicationController
     #codes = params[:codes].map{|code| {code: code[:code], latest_update: code[:latest_update]}}
     codes = params[:codes].map {|c| c.downcase}
 
-    student_codes = codes.select {|code| code.start_with?('s')} # get all students' codes from querystring
-    group_codes = codes.select {|code| code.start_with?('g')}
+    if code.present?
 
-    # find the group based on the given codes for students
-    students = Student.by_codes(student_codes)
-    groups = Group.by_codes(group_codes)
+      student_codes = codes.select {|code| code.start_with?('s')} # get all students' codes from querystring
+      group_codes = codes.select {|code| code.start_with?('g')}
 
-    groups_ids = (students.map{ |s| s.groups } + groups.pluck(:id)).flatten
+      # find the group based on the given codes for students
+      students = Student.by_codes(student_codes)
+      groups = Group.by_codes(group_codes)
 
-    last_update = params[:last_update]
-    # find messages based on the groups found
-    @messages =   Message.published.for_app.by_group_ids(groups_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
+      groups_ids = (students.map{ |s| s.groups } + groups.pluck(:id)).flatten
 
-    # add student firstname targeted for each message
-    @messages_with_students = @messages.map { |m|
-      list_of_students = students.collect { |s|
-        s.firstname if (!(s.groups & m.groups).empty?)
+      last_update = params[:last_update]
+      # find messages based on the groups found
+      @messages =   Message.published.for_app.by_group_ids(groups_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
+
+      # add student firstname targeted for each message
+      @messages_with_students = @messages.map { |m|
+        list_of_students = students.collect { |s|
+          s.firstname if (!(s.groups & m.groups).empty?)
+        }
+        list_of_groups = groups.collect { |g|
+          g.name if (m.groups.include? g.id)
+        }
+
+
+        m.students = list_of_students.compact + list_of_groups.compact
+        m.signature = {
+          fullname: m.author.fullname,
+          function: m.author.function,
+          schoolname: m.school.name,
+          address: m.school.address,
+          url: m.school.url,
+          email: m.author.email,
+          phone: m.school.phone,
+          logo_url: m.school.file_url
+        }
+        m
       }
-      list_of_groups = groups.collect { |g|
-        g.name if (m.groups.include? g.id)
-      }
 
-
-      m.students = list_of_students.compact + list_of_groups.compact
-      m.signature = {
-        fullname: m.author.fullname,
-        function: m.author.function,
-        schoolname: m.school.name,
-        address: m.school.address,
-        url: m.school.url,
-        email: m.author.email,
-        phone: m.school.phone,
-        logo_url: m.school.file_url
-      }
-      m
-    }
-
-    render json: @messages_with_students.to_json(:include => :mfiles)
+      render json: @messages_with_students.to_json(:include => :mfiles)
+    else
+      render json: [].to_json
+    end
   end
 
   def get_fullname_by_code
