@@ -3,9 +3,9 @@ class ApiController < ApplicationController
   def messages
     # receive codes corresponding to a student
     #codes = params[:codes].map{|code| {code: code[:code], latest_update: code[:latest_update]}}
-    codes = params[:codes].map {|c| c.downcase}
+    if params[:codes].present?
 
-    if codes.present?
+      codes = params[:codes].map {|c| c.downcase}
       student_codes = codes.select {|code| code.start_with?('s')} # get all students' codes from querystring
       group_codes = codes.select {|code| code.start_with?('g')}
 
