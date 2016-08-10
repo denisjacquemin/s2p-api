@@ -9,27 +9,35 @@ class ApiController < ApplicationController
       student_codes = codes.select {|code| code.start_with?('s')} # get all students' codes from querystring
       group_codes = codes.select {|code| code.start_with?('g')}
 
-      # find the group based on the given codes for students
-      students = Student.by_codes(student_codes)
-      groups = Group.by_codes(group_codes)
+      # build message.groups list based on code received (group's code or student's code)
+      groups_ids = build_groups_ids(student_codes, group_codes)
 
-      groups_ids = (students.map{ |s| s.groups } + groups.pluck(:id)).flatten
+      student_ids = build_students_ids(student_codes)
 
       last_update = params[:last_update]
       # find messages based on the groups found
-      @messages =   Message.published.for_app.by_group_ids(groups_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
+      @messages =   Message.published.for_app.by_group_and_student_ids(groups_ids, student_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
+
+      students = Student.by_codes(student_codes)
+      groups = Group.by_codes(group_codes)
 
       # add student firstname targeted for each message
       @messages_with_students = @messages.map { |m|
+        # for each message, find all targeted students
         list_of_students = students.collect { |s|
-          s.firstname if (!(s.groups & m.groups).empty?)
+          # for one message check each students
+          # if student's groups have at least one group in common with message's groups
+          # or if student.id in contained in message.students
+          # then add firstname in list of students
+          gic = group_in_common?(s.groups, m.groups)
+          s.firstname if (gic or m.students.include?(s.id))
         }
         list_of_groups = groups.collect { |g|
           g.name if (m.groups.include? g.id)
         }
 
 
-        m.students = list_of_students.compact + list_of_groups.compact
+        m.student_names = list_of_students.compact + list_of_groups.compact
         m.signature = {
           fullname: m.author.fullname,
           function: m.author.function,
@@ -153,4 +161,22 @@ class ApiController < ApplicationController
     end
     render json: message
   end
+
+  private
+    def build_groups_ids(student_codes, group_codes)
+      students = Student.by_codes(student_codes)
+      groups = Group.by_codes(group_codes)
+      groups_ids = students.map{ |s| s.groups } + groups.pluck(:id)
+      groups_ids.flatten
+    end
+
+    def build_students_ids(student_codes)
+      Student.by_codes(student_codes).pluck(:id)
+    end
+
+    def group_in_common?(student_groups, message_groups)
+      sg = student_groups || []
+      mg = message_groups || []
+      (sg & mg).any?
+    end
 end
