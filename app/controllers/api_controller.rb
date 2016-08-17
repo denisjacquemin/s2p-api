@@ -64,10 +64,10 @@ class ApiController < ApplicationController
       s = Student.by_codes(code).first
       name = s.fullname unless s.nil?
     elsif code.start_with?("g")
-      g = Group.by_codes(code).active.first
+      g = Group.by_codes(code).first
       name = g.name unless g.nil?
     elsif code.start_with?("u")
-      u = User.by_codes(code).first
+      u = User.by_codes(code).active.first
       name = u.fullname unless u.nil?
     end
     render json: {code: code, fullname: name}
