@@ -58,13 +58,13 @@ class ApiController < ApplicationController
   end
 
   def get_fullname_by_code
-    name = 'nothing found'
+    name = 'Code erroné'
     code = params[:code].downcase
     if code.start_with?("s")
       s = Student.by_codes(code).first
       name = s.fullname unless s.nil?
     elsif code.start_with?("g")
-      g = Group.by_codes(code).first
+      g = Group.by_codes(code).active.first
       name = g.name unless g.nil?
     elsif code.start_with?("u")
       u = User.by_codes(code).first
