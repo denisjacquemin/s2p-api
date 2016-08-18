@@ -58,7 +58,7 @@ class ApiController < ApplicationController
   end
 
   def get_fullname_by_code
-    name = 'Code erroné'
+    name = 'notfound'
     code = params[:code].downcase
     if code.start_with?("s")
       s = Student.by_codes(code).first
