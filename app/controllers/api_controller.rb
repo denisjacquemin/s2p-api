@@ -30,7 +30,11 @@ class ApiController < ApplicationController
           # or if student.id in contained in message.students
           # then add firstname in list of students
           gic = group_in_common?(s.groups, m.groups)
-          s.firstname if (gic or m.students.include?(s.id))
+
+          s_contained_in_m = false
+          s_contained_in_m = m.students.include?(s.id) if (m.students.present?)
+
+          s.firstname if (gic or s_contained_in_m)
         }
         list_of_groups = groups.collect { |g|
           g.name if (m.groups.include? g.id)
