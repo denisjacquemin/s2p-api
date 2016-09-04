@@ -9,8 +9,9 @@ class Message < ApplicationRecord
     super.merge('student_names' => self.student_names, 'signature' => self.signature)
   end
 
+  enum status: [:draft, :published, :waiting_for_approval, :approval_refused, :approval_accepted ]
 
-  scope :published, -> { where.not(publish_date: nil) }
+  scope :published, -> { where(status: :published) }
   scope :by_group_ids, ->(group_ids) { where("groups && ARRAY[?]::integer[]", group_ids) }
   scope :by_student_ids, ->(student_ids) { where("students && ARRAY[?]::integer[]", student_ids) }
   scope :by_group_and_student_ids, ->(group_ids, student_ids) { where("groups && ARRAY[?]::integer[] or students && ARRAY[?]::integer[]", group_ids, student_ids) }
