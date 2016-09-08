@@ -112,6 +112,7 @@ class ApiController < ApplicationController
     end
     device.registration_id = params[:rid]
     device.platform = params[:platform]
+    device.codes = params[:code]
 
     if device.save
       logger.info "Registartion ID (#{device.registration_id}) saved for #{device.uuid}, platform #{device.platform}"
