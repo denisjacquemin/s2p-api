@@ -104,6 +104,19 @@ class ApiController < ApplicationController
     render json: {res: 'ok'}
   end
 
+  def resetcodeonserver
+    device = Device.where(uuid: params[:uuid]).first
+    device.codes = []
+
+    if device.save
+      logger.info "resetcodeonserver for #{device.uuid}"
+    else
+      logger.error "Error when saving resetcodeonserver UUID: #{params[:uuid]}"
+      logger.error device.errors.inspect
+    end
+
+  end
+
   def saveregistrationid
     begin
       device = Device.find_or_create_by(uuid: params[:uuid])
@@ -112,7 +125,6 @@ class ApiController < ApplicationController
     end
     device.registration_id = params[:rid]
     device.platform = params[:platform]
-    device.codes = params[:code]
 
     if device.save
       logger.info "Registartion ID (#{device.registration_id}) saved for #{device.uuid}, platform #{device.platform}"
