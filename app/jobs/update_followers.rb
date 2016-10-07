@@ -7,11 +7,13 @@ class UpdateFollowersJob < ApplicationJob
     students_ids_to_increment = new_device_codes - old_device_codes
 
     Student.by_code(students_ids_to_decrement).select(:id).each do |student|
+      logger.debug "decrement #{student.followers} for student #{student.inspect}"
       student.decrement(:followers)
       student.save
     end
 
     Student.by_code(students_ids_to_increment).select(:id).each do |student|
+      logger.debug "increment #{student.followers} for student #{student.inspect}"
       student.increment(:followers)
       student.save
     end
