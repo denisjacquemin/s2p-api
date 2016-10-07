@@ -11,10 +11,12 @@ class Device < ApplicationRecord
   # http://www.postgresql.org/docs/current/static/functions-array.html
   def add_code(code)
     #self.update_all(['codes = array_append(codes, ?)', code])
+    codes_will_change!
     Device.where(uuid: self.uuid).update_all(['codes = array_append(codes, ?)', code])
   end
 
   def remove_code(code)
+    codes_will_change!
     Device.where(token: self.token).update_all(['codes = array_remove(codes, ?)', code])
   end
 
