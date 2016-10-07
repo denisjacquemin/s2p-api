@@ -27,6 +27,7 @@ class Device < ApplicationRecord
   end
 
   def update_followers
+    logger.debug "update_followers"
     UpdateFollowersJob.perform_later(self.codes_was, self.codes)
   end
 

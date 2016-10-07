@@ -2,6 +2,7 @@ class UpdateFollowersJob < ApplicationJob
   queue_as :default
 
   def perform(old_device_codes, new_device_codes)
+    logger.debug "execute UpdateFollowersJob.perform(#{old_device_codes}, #{new_device_codes})"
     students_ids_to_decrement = old_device_codes - new_device_codes
     students_ids_to_increment = new_device_codes - old_device_codes
 
