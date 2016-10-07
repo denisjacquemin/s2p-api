@@ -9,18 +9,18 @@ class Device < ApplicationRecord
   # http://stackoverflow.com/questions/24236871/in-rails-how-to-add-an-element-to-an-array-type-attribute-for-all-records
   # http://www.postgresql.org/docs/current/static/arrays.html
   # http://www.postgresql.org/docs/current/static/functions-array.html
-  def add_code(code)
-    #self.update_all(['codes = array_append(codes, ?)', code])
-    codes_will_change!
-    self.codes.push(code)
-    #Device.where(uuid: self.uuid).update_all(['codes = array_append(codes, ?)', code])
-  end
-
-  def remove_code(code)
-    codes_will_change!
-    self.codes.delete(code)
-    #Device.where(uuid: self.uuid).update_all(['codes = array_remove(codes, ?)', code])
-  end
+  # def add_code(code)
+  #   #self.update_all(['codes = array_append(codes, ?)', code])
+  #   codes_will_change!
+  #   self.codes.push(code)
+  #   #Device.where(uuid: self.uuid).update_all(['codes = array_append(codes, ?)', code])
+  # end
+  #
+  # def remove_code(code)
+  #   codes_will_change!
+  #   self.codes.delete(code)
+  #   #Device.where(uuid: self.uuid).update_all(['codes = array_remove(codes, ?)', code])
+  # end
 
   def disable
     self.update(active: false)

@@ -84,24 +84,30 @@ class ApiController < ApplicationController
     rescue ActiveRecord::RecordNotUnique
       retry
     end
-    device.add_code(code)
-    # if code.start_with?("s")
-    #   Student.by_code(code).first.follow
-    # end
-
-    render json: {res: 'ok'}
+    device.codes_will_change!
+    device.codes.push(code)
+    if device.save
+      render json: {res: 'ok'}
+    else
+      render json: {res: 'not ok'}
+    end
   end
 
   def unlink_code_to_device
     code = params[:code].downcase
     device = Device.find_by uuid: params[:uuid]
-    device.remove_code(code) unless device.nil?
 
-    # if code.start_with?("s")
-    #   Student.by_code(code).first.unfollow
-    # end
+    unless device.nil?
+      device.codes_will_change!
+      device.codes.delete(code)
+      if device.save
+        render json: {res: 'ok'}
+      else
+        render json: {res: 'not ok'}
+      end
+    end
 
-    render json: {res: 'ok'}
+    render json: {res: 'no device found'}
   end
 
   def resetcodeonserver
