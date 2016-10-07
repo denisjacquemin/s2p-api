@@ -11,10 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160704114044) do
+ActiveRecord::Schema.define(version: 20161007123252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
 
   create_table "devices", force: :cascade do |t|
     t.string   "token"
@@ -25,29 +40,44 @@ ActiveRecord::Schema.define(version: 20160704114044) do
     t.string   "platform"
     t.string   "uuid"
     t.string   "registration_id"
+    t.index ["uuid"], name: "index_devices_on_uuid", unique: true, using: :btree
   end
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
-    t.integer  "students",   default: [],              array: true
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "school_id"
     t.string   "code"
+    t.boolean  "updatable",   default: true
+    t.string   "internal_id"
+    t.index ["code"], name: "index_groups_on_code", unique: true, using: :btree
+    t.index ["school_id", "name"], name: "index_groups_on_school_id_and_name", unique: true, using: :btree
+  end
+
+  create_table "groups_users", id: false, force: :cascade do |t|
+    t.integer "group_id"
+    t.integer "user_id"
+    t.index ["group_id"], name: "index_groups_users_on_group_id", using: :btree
+    t.index ["user_id"], name: "index_groups_users_on_user_id", using: :btree
   end
 
   create_table "messages", force: :cascade do |t|
     t.string   "title"
     t.text     "content"
     t.integer  "school_id"
-    t.integer  "groups",       default: [],              array: true
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "groups",             default: [],                 array: true
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.datetime "publish_date"
     t.integer  "status"
     t.integer  "author_id"
     t.string   "when"
     t.integer  "mtype"
+    t.boolean  "send_by_email",      default: true
+    t.boolean  "send_to_app",        default: true
+    t.integer  "students",           default: [],                 array: true
+    t.boolean  "skip_send_by_email", default: false
   end
 
   create_table "mfiles", force: :cascade do |t|
@@ -134,14 +164,24 @@ ActiveRecord::Schema.define(version: 20160704114044) do
   create_table "students", force: :cascade do |t|
     t.string   "firstname"
     t.string   "lastname"
-    t.integer  "groups",     default: [],              array: true
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "groups",                default: [],              array: true
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "school_id"
     t.string   "code"
     t.string   "classroom"
     t.string   "level"
-    t.boolean  "followed"
+    t.integer  "followers",             default: 0
+    t.string   "emails"
+    t.boolean  "sent_message_by_email"
+    t.index ["code"], name: "index_students_on_code", unique: true, using: :btree
+  end
+
+  create_table "students_users", id: false, force: :cascade do |t|
+    t.integer "student_id"
+    t.integer "user_id"
+    t.index ["student_id"], name: "index_students_users_on_student_id", using: :btree
+    t.index ["user_id"], name: "index_students_users_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -175,6 +215,7 @@ ActiveRecord::Schema.define(version: 20160704114044) do
     t.integer  "schools",                default: [],              array: true
     t.string   "function"
     t.string   "code"
+    t.integer  "groups",                 default: [],              array: true
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
     t.index ["invitations_count"], name: "index_users_on_invitations_count", using: :btree

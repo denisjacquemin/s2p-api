@@ -14,6 +14,8 @@ gem 'rack-cors', :require => 'rack/cors'
 # Action Cable dependencies for the Redis adapter
 #gem 'redis', '~> 3.0'
 gem 'browser'
+
+gem 'delayed_job_active_record'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
