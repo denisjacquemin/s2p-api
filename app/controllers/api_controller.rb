@@ -85,9 +85,9 @@ class ApiController < ApplicationController
       retry
     end
     device.add_code(code)
-    if code.start_with?("s")
-      Student.by_code(code).first.follow
-    end
+    # if code.start_with?("s")
+    #   Student.by_code(code).first.follow
+    # end
 
     render json: {res: 'ok'}
   end
@@ -97,9 +97,9 @@ class ApiController < ApplicationController
     device = Device.find_by uuid: params[:uuid]
     device.remove_code(code) unless device.nil?
 
-    if code.start_with?("s")
-      Student.by_code(code).first.unfollow
-    end
+    # if code.start_with?("s")
+    #   Student.by_code(code).first.unfollow
+    # end
 
     render json: {res: 'ok'}
   end

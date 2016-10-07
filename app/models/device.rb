@@ -2,6 +2,8 @@ class Device < ApplicationRecord
 
   validates :uuid, uniqueness: true
 
+  after_save :update_followers, :if "codes_changed?"
+
   enum notification_platform: [:ios, :android]
 
   # http://stackoverflow.com/questions/24236871/in-rails-how-to-add-an-element-to-an-array-type-attribute-for-all-records
@@ -22,6 +24,10 @@ class Device < ApplicationRecord
 
   def enable
     self.update(active: true)
+  end
+
+  def update_followers
+    UpdateFollowersJob.perform_later(self.codes_was, self.codes)
   end
 
   # def self.remove_group(student_ids, group_ids)
