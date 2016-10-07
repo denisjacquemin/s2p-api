@@ -8,10 +8,13 @@ class UpdateFollowersJob < ApplicationJob
 
     Student.by_code(students_ids_to_decrement).select(:id).each do |student|
       student.unfollow
+      student.save
     end
 
     Student.by_code(students_ids_to_increment).select(:id).each do |student|
       student.follow
+      student.save
     end
+
   end
 end
