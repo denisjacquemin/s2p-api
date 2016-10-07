@@ -17,7 +17,7 @@ class Device < ApplicationRecord
 
   def remove_code(code)
     codes_will_change!
-    Device.where(token: self.token).update_all(['codes = array_remove(codes, ?)', code])
+    Device.where(uuid: self.uuid).update_all(['codes = array_remove(codes, ?)', code])
   end
 
   def disable
