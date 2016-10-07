@@ -10,8 +10,10 @@ class UpdateFollowersJob < ApplicationJob
     logger.debug "students_ids_to_increment: #{students_ids_to_increment}"
     Student.by_code(students_ids_to_decrement).each do |student|
       logger.debug "decrement #{student.followers} for student #{student.inspect}"
-      student.decrement(:followers)
-      student.save
+      if (student.followers > 0)
+        student.decrement(:followers)
+        student.save
+      end
     end
 
     Student.by_code(students_ids_to_increment).each do |student|
