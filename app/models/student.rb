@@ -8,14 +8,6 @@ class Student < ApplicationRecord
     "#{self.firstname} #{self.lastname}"
   end
 
-  def follow
-    self.increment(:followers)
-  end
-
-  def unfollow
-    self.decrement(:followers)
-  end
-
   private
       def downcase_code
         self.code.downcase!
