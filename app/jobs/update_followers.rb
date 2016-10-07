@@ -12,6 +12,7 @@ class UpdateFollowersJob < ApplicationJob
     end
 
     Student.by_code(students_ids_to_increment).select(:id).each do |student|
+      byebug
       student.follow
       student.save
     end

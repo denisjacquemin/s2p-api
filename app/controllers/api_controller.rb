@@ -106,8 +106,6 @@ class ApiController < ApplicationController
         render json: {res: 'not ok'}
       end
     end
-
-    render json: {res: 'no device found'}
   end
 
   def resetcodeonserver
