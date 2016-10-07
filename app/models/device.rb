@@ -12,12 +12,14 @@ class Device < ApplicationRecord
   def add_code(code)
     #self.update_all(['codes = array_append(codes, ?)', code])
     codes_will_change!
-    Device.where(uuid: self.uuid).update_all(['codes = array_append(codes, ?)', code])
+    self.codes.push(code)
+    #Device.where(uuid: self.uuid).update_all(['codes = array_append(codes, ?)', code])
   end
 
   def remove_code(code)
     codes_will_change!
-    Device.where(uuid: self.uuid).update_all(['codes = array_remove(codes, ?)', code])
+    self.codes.delete(code)
+    #Device.where(uuid: self.uuid).update_all(['codes = array_remove(codes, ?)', code])
   end
 
   def disable
