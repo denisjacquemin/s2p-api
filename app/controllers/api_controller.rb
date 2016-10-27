@@ -68,15 +68,15 @@ class ApiController < ApplicationController
     if code.start_with?("s")
       s = Student.by_codes(code).first
       name = s.fullname unless s.nil?
-      schoolname = s.school.name
+      schoolname = s.school.name unless s.nil?
     elsif code.start_with?("g")
       g = Group.by_codes(code).first
       name = g.name unless g.nil?
-      schoolname =  g.school.name
+      schoolname =  g.school.name unless g.nil?
     elsif code.start_with?("u")
       u = User.by_codes(code).active.first
       name = u.fullname unless u.nil?
-      schoolname = School.find(u.schools).pluck(:name).join(', ')
+      schoolname = School.find(u.schools).pluck(:name).join(', ') unless u.nil?
     end
     render json: {code: code, fullname: name, schoolname: schoolname}
   end
