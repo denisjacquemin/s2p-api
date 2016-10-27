@@ -1,6 +1,6 @@
 class Student < ApplicationRecord
   before_save     :downcase_code
-
+  belongs_to :school
   scope :by_codes, ->(codes) { where(code: codes) }
   scope :by_code, ->(code) { where(code: code) }
 

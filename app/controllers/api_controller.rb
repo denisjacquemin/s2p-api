@@ -63,18 +63,22 @@ class ApiController < ApplicationController
 
   def get_fullname_by_code
     name = 'notfound'
+    schoolname='notfound'
     code = params[:code].downcase
     if code.start_with?("s")
       s = Student.by_codes(code).first
       name = s.fullname unless s.nil?
+      schoolname = s.school.name
     elsif code.start_with?("g")
       g = Group.by_codes(code).first
       name = g.name unless g.nil?
+      schoolname =  g.school.name
     elsif code.start_with?("u")
       u = User.by_codes(code).active.first
       name = u.fullname unless u.nil?
+      schoolname = School.find(u.schools).pluck(:name).join(', ')
     end
-    render json: {code: code, fullname: name}
+    render json: {code: code, fullname: name, schoolname: schoolname}
   end
 
   def link_code_to_device
