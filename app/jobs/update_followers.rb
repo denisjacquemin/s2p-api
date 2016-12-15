@@ -10,9 +10,9 @@ class UpdateFollowersJob < ApplicationJob
     logger.debug "students_to_refresh: #{students_to_refresh.inspect()}"
 
     students_to_refresh.each do |student|
-      # check the number of device dollowing the student
-      followers_count = Device.by_code(student.code)
       logger.debug "student #{student.code} followers is #{followers_count}"
+      # check the number of device dollowing the student
+      followers_count = Device.by_code(student.code).count
       student.update(followers: followers_count)
     end
 

@@ -4,6 +4,7 @@ class Device < ApplicationRecord
 
   after_save :update_followers, if: "codes_changed?"
   after_destroy :update_followers
+  scope :by_codes, ->(codes) { where("codes && ARRAY[?]::varchar[]", codes) }
 
   enum notification_platform: [:ios, :android]
 
