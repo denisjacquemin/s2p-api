@@ -125,6 +125,37 @@ class ApiController < ApplicationController
 
   end
 
+  def savedevicestatetoserver
+
+    codes = params[:codes].map {|c| c.downcase}
+    uuid = params[:uuid]
+    rid = params[:rid]
+    platform = params[:platform]
+
+    begin
+      device = Device.find_or_create_by(uuid: uuid)
+    rescue ActiveRecord::RecordNotUnique
+      retry
+    end
+    device.registration_id = rid
+    device.platform = platform
+
+    syncCodes = []
+    if codes.any?
+      syncCodes = codes.select { |code| Student.by_code(code).exists? } # save only a code if it is still valid
+    end
+    device.codes_will_change!
+    device.codes = syncCodes
+    byebug
+    if device.save
+      logger.info "Saving Device State (#{device.registration_id}) saved for #{device.uuid}, platform #{device.platform}, codes #{device.codes}"
+    else
+      logger.error "Error when saving Device State (#{params[:rid]}) for #{params[:uuid]}, platform #{params[:platform]}, codes #{params[:codes]}"
+      logger.error device.errors.inspect
+    end
+    render json: {res: 'ok'}
+  end
+
   def saveregistrationid
     begin
       device = Device.find_or_create_by(uuid: params[:uuid])
