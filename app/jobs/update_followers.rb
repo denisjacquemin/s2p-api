@@ -5,11 +5,14 @@ class UpdateFollowersJob < ApplicationJob
     logger.debug "execute UpdateFollowersJob.perform(#{old_device_codes}, #{new_device_codes})"
     # collect all codes on which followers counter should be refreshed
     codes_to_refresh = (old_device_codes + new_device_codes).uniq
+    logger.debug "codes_to_refresh: #{codes_to_refresh}"
     students_to_refresh = Student.by_codes(codes_to_refresh)
+    logger.debug "students_to_refresh: #{students_to_refresh.inspect()}"
 
     students_to_refresh.each do |student|
       # check the number of device dollowing the student
       followers_count = Device.by_code(student.code)
+      logger.debug "student #{student.code} followers is #{followers_count}"
       student.update(followers: followers_count)
     end
 
