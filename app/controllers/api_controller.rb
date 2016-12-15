@@ -127,7 +127,7 @@ class ApiController < ApplicationController
 
   def savedevicestatetoserver
 
-    codes = params[:codes].map {|c| c.downcase}
+    codes = params[:codes].map {|c| c.downcase} if params[:codes].present?
     uuid = params[:uuid]
     rid = params[:rid]
     platform = params[:platform]
@@ -141,12 +141,11 @@ class ApiController < ApplicationController
     device.platform = platform
 
     syncCodes = []
-    if codes.any?
+    unless codes.blank?
       syncCodes = codes.select { |code| Student.by_code(code).exists? } # save only a code if it is still valid
     end
     device.codes_will_change!
     device.codes = syncCodes
-    byebug
     if device.save
       logger.info "Saving Device State (#{device.registration_id}) saved for #{device.uuid}, platform #{device.platform}, codes #{device.codes}"
     else
