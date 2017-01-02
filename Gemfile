@@ -16,6 +16,10 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'browser'
 
 gem 'delayed_job_active_record'
+
+gem 'cloudinary'
+gem 'attachinary'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -3,6 +3,8 @@ class Message < ApplicationRecord
   belongs_to :school
   belongs_to :author, class_name: "User"
 
+  has_attachments :photos, maximum: 10
+
   # http://stackoverflow.com/questions/6892044/add-virtual-attribute-to-json-output
   attr_accessor :student_names, :signature
   def attributes
