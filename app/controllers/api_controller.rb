@@ -52,13 +52,10 @@ class ApiController < ApplicationController
           phone: m.school.phone,
           logo_url: m.school.file_url
         }
-
-        m.photos = m.photos.to_json
-
         m
       }
 
-      render json: @messages_with_students.to_json(:include => :mfiles)
+      render json: @messages_with_students.to_json(:include => [:mfiles, :photos])
     else
       render json: [].to_json
     end
