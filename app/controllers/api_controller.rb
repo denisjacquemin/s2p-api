@@ -53,7 +53,7 @@ class ApiController < ApplicationController
           logo_url: m.school.file_url
         }
 
-        m.photos = m.photos.pluck(:path).to_json
+        m.photos = m.photos.to_json
 
         m
       }
