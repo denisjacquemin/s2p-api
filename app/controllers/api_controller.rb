@@ -54,11 +54,11 @@ class ApiController < ApplicationController
         }
 
         m.photos = m.photos.pluck(:path).to_json
-        
+
         m
       }
 
-      render json: @messages_with_students.to_json(:include => [:mfiles, :photos)
+      render json: @messages_with_students.to_json(:include => :mfiles)
     else
       render json: [].to_json
     end
