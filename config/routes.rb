@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'saveregistrationid', to: 'api#saveregistrationid'
   get 'resetcodeonserver', to: 'api#resetcodeonserver'
   get 'savedevicestatetoserver', to: 'api#savedevicestatetoserver'
+  post 'saveform', to: 'api#saveform'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 

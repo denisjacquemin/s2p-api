@@ -125,6 +125,16 @@ class ApiController < ApplicationController
 
   end
 
+  def saveform
+   @form = Form.new(muuid: params[:muuid], formdata: params[:formdata].force_encoding('ISO-8859-1'))
+
+    if @form.save
+      render json: { success: true }
+    else
+      render json: { success: false }
+    end
+  end
+
   def savedevicestatetoserver
 
     codes = params[:codes].map {|c| c.downcase} if params[:codes].present?
