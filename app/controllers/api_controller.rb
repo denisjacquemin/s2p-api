@@ -126,7 +126,9 @@ class ApiController < ApplicationController
   end
 
   def saveform #.force_encoding('ISO-8859-1')
-   @form = Form.new(muuid: params[:muuid], formdata: params[:formdata])
+    j = JSON.parse params[:formdata]
+    j.prepend({name: 'horodateur', value: I18n.l(Time.now, format: :short)})
+    @form = Form.new(muuid: params[:muuid], formdata: JSON.generate(j))
 
     if @form.save
       render json: { success: true }
