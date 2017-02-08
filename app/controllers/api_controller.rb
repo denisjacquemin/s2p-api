@@ -125,8 +125,8 @@ class ApiController < ApplicationController
 
   end
 
-  def saveform
-   @form = Form.new(muuid: params[:muuid], formdata: params[:formdata].force_encoding('ISO-8859-1'))
+  def saveform #.force_encoding('ISO-8859-1')
+   @form = Form.new(muuid: params[:muuid], formdata: params[:formdata])
 
     if @form.save
       render json: { success: true }
