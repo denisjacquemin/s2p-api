@@ -33,6 +33,7 @@ module S2pAPI
         resource '*', :headers => :any, :methods => [:get]
       end
     end
+    config.time_zone = "Brussels"
     require "attachinary/orm/active_record"
   end
 end
