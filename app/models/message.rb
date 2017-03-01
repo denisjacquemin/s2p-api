@@ -6,9 +6,9 @@ class Message < ApplicationRecord
   has_attachments :photos, maximum: 10
 
   # http://stackoverflow.com/questions/6892044/add-virtual-attribute-to-json-output
-  attr_accessor :student_names, :signature
+  attr_accessor :student_names, :signature, :forms
   def attributes
-    super.merge('student_names' => self.student_names, 'signature' => self.signature)
+    super.merge('student_names' => self.student_names, 'signature' => self.signature, 'forms' => self.forms)
   end
 
   enum status: [:draft, :published, :waiting_for_approval, :approval_refused, :approval_accepted ]
