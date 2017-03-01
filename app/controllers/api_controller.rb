@@ -52,6 +52,8 @@ class ApiController < ApplicationController
           phone: m.school.phone,
           logo_url: m.school.file_url
         }
+        forms_submitted = Form.by_muuid(m.muuid).pluck(:created_at)
+        m.forms = forms_submitted
         m
       }
 
