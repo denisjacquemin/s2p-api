@@ -14,7 +14,7 @@ class ApiController < ApplicationController
 
       student_ids = build_students_ids(student_codes)
 
-      last_update = params[:last_update]
+      duuid = params[:uuid]
       # find messages based on the groups found
       @messages =   Message.published.for_app.by_group_and_student_ids(groups_ids, student_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
 
@@ -52,7 +52,7 @@ class ApiController < ApplicationController
           phone: m.school.phone,
           logo_url: m.school.file_url
         }
-        forms_submitted = Form.by_muuid(m.muuid).pluck(:created_at)
+        forms_submitted = Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at)
         m.forms = forms_submitted
         m
       }
