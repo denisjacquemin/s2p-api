@@ -1,4 +1,5 @@
 class ApiController < ApplicationController
+  include ScoutApm::Instruments::ActionControllerRails3Rails4Instruments
 
   def messages
     # receive codes corresponding to a student
