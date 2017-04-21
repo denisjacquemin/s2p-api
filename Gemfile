@@ -20,6 +20,8 @@ gem 'delayed_job_active_record'
 gem 'cloudinary'
 gem 'attachinary', github: 'assembler/attachinary'
 
+gem 'scout_apm'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
