@@ -80,6 +80,7 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.9.0)
     netrc (0.11.0)
+    newrelic_rpm (4.0.0.332)
     nio4r (1.2.1)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
@@ -156,6 +157,7 @@ DEPENDENCIES
   byebug
   cloudinary
   delayed_job_active_record
+  newrelic_rpm
   pg
   puma
   rack-cors

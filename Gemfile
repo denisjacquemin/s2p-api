@@ -15,6 +15,8 @@ gem 'rack-cors', :require => 'rack/cors'
 #gem 'redis', '~> 3.0'
 gem 'browser'
 
+gem 'newrelic_rpm'
+
 gem 'delayed_job_active_record'
 
 gem 'cloudinary'
