@@ -1,4 +1,5 @@
 class ApiController < ApplicationController
+  include ScoutApm::Instruments::ActionControllerRails3Rails4Instruments
 
   def messages
     # receive codes corresponding to a student
@@ -16,7 +17,7 @@ class ApiController < ApplicationController
 
       duuid = params[:uuid]
       # find messages based on the groups found
-      @messages =   Message.published.for_app.by_group_and_student_ids(groups_ids, student_ids).includes(:mfiles).order(publish_date: :desc).limit(30)
+      @messages =   Message.published.for_app.by_group_and_student_ids(groups_ids, student_ids).includes(:mfiles).order(update_at: :desc).limit(30)
 
       students = Student.by_codes(student_codes)
       groups = Group.by_codes(group_codes)
