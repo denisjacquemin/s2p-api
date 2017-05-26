@@ -6,9 +6,15 @@ class Message < ApplicationRecord
   has_attachments :photos, maximum: 10
 
   # http://stackoverflow.com/questions/6892044/add-virtual-attribute-to-json-output
-  attr_accessor :student_names, :signature, :forms
+  attr_accessor :student_names, :signature, :forms, :publish_date
   def attributes
-    super.merge('student_names' => self.student_names, 'signature' => self.signature, 'forms' => self.forms)
+    super.merge('student_names' => self.student_names, 'signature' => self.signature, 'forms' => self.forms, 'publish_date' => self.publish_date)
+  end
+
+  def publish_date
+    publish_date = nil
+    publish_date = self.updated_at if self.published?
+    return publish_date
   end
 
   enum status: [:draft, :published, :waiting_for_approval, :approval_refused, :approval_accepted ]
