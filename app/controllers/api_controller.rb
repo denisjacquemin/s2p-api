@@ -52,7 +52,7 @@ class ApiController < ApplicationController
           phone: m.school.phone,
           logo_url: m.school.file_url
         }
-        unless m.muuid.nil? or duuid.nil?
+        unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
           forms_submitted = Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
           m.forms = forms_submitted
         end
