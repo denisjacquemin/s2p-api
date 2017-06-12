@@ -1,5 +1,5 @@
 class Message < ApplicationRecord
-  has_many :mfiles
+  # has_many :mfiles
   belongs_to :school
   belongs_to :author, class_name: "User"
 
