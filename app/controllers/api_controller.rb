@@ -59,7 +59,7 @@ class ApiController < ApplicationController
         m
       }
 
-      render json: @messages_with_students.to_json #(:include => [:photos])
+      render json: @messages_with_students.to_json(:include => [:photos])
     else
       render json: [].to_json
     end
