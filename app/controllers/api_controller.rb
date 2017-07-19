@@ -17,12 +17,25 @@ class ApiController < ApplicationController
       duuid = params[:uuid]
       # find messages based on the groups found
       @messages =   Message.published.includes(:photo_files).for_app.by_group_and_student_ids(groups_ids, student_ids).order(updated_at: :desc).limit(30) #.includes(:mfiles)
-
       students = Student.by_codes(student_codes)
       groups = Group.by_codes(group_codes)
 
       # add student firstname targeted for each message
       @messages_with_students = @messages.map { |m|
+
+        # finds pdf and append a link to that file in content
+        m.photos.each do |p|
+          if p.format == 'pdf'
+            m.content << "<div>"\
+              "<a style='display:block;overflow:hidden;background-color:#ddd;position:relative;margin:7px 0;height:50px;line-height:50px;border-radius:3px;padding-right:10px' target='_blank' href='https://res.cloudinary.com/#{ENV["CLOUDINARY_CLOUD_NAME"]}/#{p.resource_type}/upload/#{p.public_id}.pdf'>"\
+                "<img src='assets/img/pdf.png' style={styles.pdfIcon}/>"\
+                "<span style={styles.publicId}>#{p.public_id}</span>"\
+              "</a>"\
+            "</div>"
+          end
+        end
+
+
         # for each message, find all targeted students
         list_of_students = students.collect { |s|
           # for one message check each students
