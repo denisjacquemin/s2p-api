@@ -28,8 +28,8 @@ class ApiController < ApplicationController
           if p.format == 'pdf'
             m.content << "<div>"\
               "<a style='display:block;overflow:hidden;background-color:#ddd;position:relative;margin:7px 0;height:50px;line-height:50px;border-radius:3px;padding-right:10px' target='_blank' href='https://res.cloudinary.com/#{ENV["CLOUDINARY_CLOUD_NAME"]}/#{p.resource_type}/upload/#{p.public_id}.pdf'>"\
-                "<img src='assets/img/pdf.png' style={styles.pdfIcon}/>"\
-                "<span style={styles.publicId}>#{p.public_id}</span>"\
+                "<img src='assets/img/pdf.png' style='position:relative;top:5px;left:17px;zIndex:1'/>"\
+                "<span style='position:absolute;top:3px;left:40px'>#{p.public_id}</span>"\
               "</a>"\
             "</div>"
           end
