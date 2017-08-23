@@ -40,7 +40,7 @@ class ApiController < ApplicationController
 
         # if payment is required append a payconiq button
         if m.amount_to_pay > 0
-          m.content << "<div>"\
+          m.content << "<div style='background: #ff4785; padding: 20px 0; width: 100%'>"\
               "<a style='padding: 15px 10px; background: #00cb75; color:#fff;' href='thetransaction'>Payer avec payconiq</a>"\
             "</div>"
         end
