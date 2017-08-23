@@ -5,6 +5,8 @@ class Message < ApplicationRecord
 
   has_attachments :photos, maximum: 10
 
+  monetize :amount_to_pay_cents
+
   # http://stackoverflow.com/questions/6892044/add-virtual-attribute-to-json-output
   attr_accessor :student_names, :signature, :forms, :publish_date
   def attributes
