@@ -38,6 +38,13 @@ class ApiController < ApplicationController
           end
         end
 
+        # if payment is required append a payconiq button
+        if m.amount_to_pay > 0
+          m.content << "<div>"\
+              "<a href='thetransaction'>Payer avec payconiq</a>"\
+            "</div>"
+        end
+
 
         # for each message, find all targeted students
         list_of_students = students.collect { |s|
