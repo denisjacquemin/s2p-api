@@ -4,12 +4,23 @@ class Student < ApplicationRecord
   scope :by_codes, ->(codes) { where(code: codes) }
   scope :by_code, ->(code) { where(code: code) }
 
+  include AlgoliaSearch
+
+  algoliasearch synchronous: false do
+    attribute :firstname, :lastname, :school_id, :classroom, :level, :code, :followers, :message_sent_by_email, :phones_count
+    attributesToIndex [:firstname, :lastname, :school_id, :classroom, :level, :code]
+    attributesForFaceting ['searchable(classroom)', 'searchable(level)']
+    customRanking ['asc(level)', 'asc(lastname)']
+    typoTolerance :false
+  end
+
+
   def fullname
     "#{self.firstname} #{self.lastname}"
   end
 
   private
       def downcase_code
-        self.code.downcase!
+        self.code.downcase! unless self.code.nil?
       end
 end
