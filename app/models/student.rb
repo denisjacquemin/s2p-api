@@ -1,6 +1,7 @@
 class Student < ApplicationRecord
   before_save     :downcase_code
   belongs_to :school
+  has_many :phones, inverse_of: :student
   scope :by_codes, ->(codes) { where(code: codes) }
   scope :by_code, ->(code) { where(code: code) }
 
