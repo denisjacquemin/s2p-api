@@ -14,6 +14,14 @@ class Student < ApplicationRecord
     typoTolerance :false
   end
 
+  def message_sent_by_email
+    self.sent_message_by_email and self.emails.present?
+  end
+
+  def phones_count
+    self.phones.count
+  end
+
 
   def fullname
     "#{self.firstname} #{self.lastname}"
