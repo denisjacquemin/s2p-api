@@ -13,9 +13,10 @@ class UpdateFollowersJob < ApplicationJob
       logger.debug "$UpdateFollowersJob$ finding number of followers for student #{student.code}"
       # check the number of device dollowing the student
       followers_count = Device.by_codes(student.code).count
-      logger.debug "$UpdateFollowersJob$student #{student.code} followers is #{followers_count}"
+      logger.debug "$UpdateFollowersJob$ # student #{student.code} followers is #{followers_count}"
 
-      student.update(followers: followers_count)
+      updatedStudent = student.update(followers: followers_count)
+      logger.debug "$UpdateFollowersJob$ done for #{updatedStudent.inspect}"
     end
     logger.debug "$UpdateFollowersJob$ Job done"
     # students_ids_to_decrement = old_device_codes - new_device_codes
