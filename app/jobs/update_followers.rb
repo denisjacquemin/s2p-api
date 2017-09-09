@@ -2,21 +2,22 @@ class UpdateFollowersJob < ApplicationJob
   queue_as :default
 
   def perform(old_device_codes, new_device_codes)
-    logger.debug "execute UpdateFollowersJob.perform(#{old_device_codes}, #{new_device_codes})"
+    logger.debug "$UpdateFollowersJob$ execute UpdateFollowersJob.perform(#{old_device_codes}, #{new_device_codes})"
     # collect all codes on which followers counter should be refreshed
     codes_to_refresh = (old_device_codes + new_device_codes).uniq
-    logger.debug "codes_to_refresh: #{codes_to_refresh}"
+    logger.debug "$UpdateFollowersJob$ codes_to_refresh: #{codes_to_refresh}"
     students_to_refresh = Student.by_codes(codes_to_refresh)
-    logger.debug "students_to_refresh: #{students_to_refresh.inspect()}"
-    logger.debug "students_to_refresh.size: #{students_to_refresh.size}"
+    logger.debug "$UpdateFollowersJob$ students_to_refresh: #{students_to_refresh.inspect()}"
+    logger.debug "$UpdateFollowersJob$ students_to_refresh.size: #{students_to_refresh.size}"
     students_to_refresh.each do |student|
+      logger.debug "$UpdateFollowersJob$ finding number of followers for student #{student.code}"
       # check the number of device dollowing the student
       followers_count = Device.by_codes(student.code).count
-      logger.debug "student #{student.code} followers is #{followers_count}"
+      logger.debug "$UpdateFollowersJob$student #{student.code} followers is #{followers_count}"
 
       student.update(followers: followers_count)
     end
-
+    logger.debug "$UpdateFollowersJob$ Job done"
     # students_ids_to_decrement = old_device_codes - new_device_codes
     # students_ids_to_increment = new_device_codes - old_device_codes
     #
