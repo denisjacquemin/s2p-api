@@ -42,7 +42,8 @@ class ApiController < ApplicationController
         if m.amount_to_pay > 0
           m.content << "<div style='background: #ff4785; padding: 40px 0; width: 100%; text-align: center; margin: 0; height: 100px; line-height: 100px;'>"\
               "<a style='padding: 15px 10px; background: #00cb75; color:#fff;' href='thetransaction'>Payer avec payconiq</a>"\
-            "</div>"
+            "</div>"\
+            "<script>alert('Coucou')</script>"
         end
 
 
