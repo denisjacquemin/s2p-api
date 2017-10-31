@@ -43,7 +43,7 @@ class ApiController < ApplicationController
           m.content << "<div style='background: #ff4785; padding: 40px 0; width: 100%; text-align: center; margin: 0; height: 100px; line-height: 100px;'>"\
               "<a style='padding: 15px 10px; background: #00cb75; color:#fff;' href='thetransaction'>Payer avec payconiq</a>"\
             "</div>"\
-            "<script>setInterval(function(){ console.log('setInterval done') }, 3000);</script>"
+            "eval(alert('toto'))"
         end
 
 
