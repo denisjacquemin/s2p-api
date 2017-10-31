@@ -1,6 +1,7 @@
 class User < ApplicationRecord
 
   has_and_belongs_to_many :groups
+  has_and_belongs_to_many :students
 
   scope :by_codes, ->(codes) { where(code: codes) }
   scope :active, -> { where(deleted_at: nil) }
