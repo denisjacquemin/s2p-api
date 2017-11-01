@@ -41,7 +41,8 @@ class ApiController < ApplicationController
         # if payment is required append a payconiq button
         if m.amount_to_pay > 0
           konectoapp_host = ENV["KONECTOAPP_HOST"]
-          m.content << "<div style='background: #ff4785; padding: 40px 0; width: 100%; text-align: center; margin: 0; height: 100px; line-height: 100px;'>"\
+          m.content << "<div style='background: #ff4785; padding: 20px 0; width: 100%; text-align: center; margin: 0; height: 100px; line-height: 100px;'>"\
+              "<div>Montant à payer #{m.amount_to_pay}</div>"\
               "<a style='padding: 15px 10px; background: #00cb75; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}'>Payer avec payconiq</a>"\
             "</div>"
         end
