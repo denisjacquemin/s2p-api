@@ -42,7 +42,7 @@ class ApiController < ApplicationController
         if m.amount_to_pay > 0
           konectoapp_host = ENV["KONECTOAPP_HOST"]
           m.content << "<div style='background: #ff4785; padding: 20px 0; width: 100%; text-align: center; margin: 0;'>"\
-              "<a style='padding: 15px 10px; background: #00cb75; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}'>Payer #{m.amount_to_pay}&euro;</a>"\
+              "<a style='padding: 15px 10px; background: #00cb75; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
             "</div>"
         end
 
