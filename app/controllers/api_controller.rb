@@ -38,6 +38,7 @@ class ApiController < ApplicationController
           end
         end
 
+        list_of_students_firstname_and_lastname = []
         # for each message, find all targeted students
         list_of_students = students.collect { |s|
           # for one message check each students
@@ -49,6 +50,7 @@ class ApiController < ApplicationController
           s_contained_in_m = false
           s_contained_in_m = m.students.include?(s.id) if (m.students.present?)
 
+          list_of_students_firstname_and_lastname <<  s.fullname if (gic or s_contained_in_m)
           s.firstname if (gic or s_contained_in_m)
         }
         list_of_groups = groups.collect { |g|
@@ -59,7 +61,7 @@ class ApiController < ApplicationController
         if m.amount_to_pay > 0
           konectoapp_host = ENV["KONECTOAPP_HOST"]
           m.content << "<div style='background: #ff4785; padding: 40px 0; width: 100%; text-align: center; margin: 0;'>"\
-              "<a style='padding: 15px 50px; background: #00cb75; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
+              "<a style='padding: 15px 50px; background: #00cb75; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students_firstname_and_lastname.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
             "</div>"
         end
 
