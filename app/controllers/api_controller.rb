@@ -58,11 +58,49 @@ class ApiController < ApplicationController
         }
 
         # if payment is required append a payconiq button
-        if m.amount_to_pay > 0
-          konectoapp_host = ENV["KONECTOAPP_HOST"]
-          m.content << "<div style='background: #ff4785; padding: 40px 0; width: 100%; text-align: center; margin: 0;'>"\
-              "<a style='padding: 15px 50px; background: #00cb75; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students_firstname_and_lastname.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
-            "</div>"
+        if m.include_payment?
+
+          <table cellpadding="0" cellspacing="0" border="0" align="left" style="border-collapse:separate;border:1px solid #1791c8;width:100%">
+            <tbody>
+              <tr>
+                <td height="15" colspan="3"> </td>
+              </tr>
+              <tr>
+                <td width="30"> </td>
+                <td>
+                  <% account_number = m.account.account_number unless m.account.nil? or m.account.account_number.blank? %>
+                  <p style="margin-bottom:0px;text-align:left;margin:0px;padding:0px;color:#000;font-family:Verdana,Geneva,sans-serif;font-size:14px;line-height:22px">
+                    Le montant de <strong style="color:#1d92c4"><%=  humanized_money m.amount_to_pay %> EUR</strong> est à payer
+                    <% unless m.billing_due_date.blank? %>
+                      avant le <strong style="color:#1d92c4"> <%= m.billing_due_date %></strong>
+                    <% end %>
+                    <% unless account_number.blank? %>
+                      <br>sur le compte <strong style="color:#1d92c4"><%= account_number %></strong>
+                    <% end %>
+                    <% unless m.billing_description.blank? %>
+                      <br>avec la communication <strong style="color:#1d92c4"><%= m.billing_description %></strong>.
+                    <% end %>
+                    <% unless m.billing_comment.blank? %>
+                      <br><br>
+                      <%= m.billing_comment %>
+                    <% end %>
+                  </p>
+                </td>
+                <td width="30"> </td>
+              </tr>
+              <tr>
+                <td height="15" colspan="3"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          if m.payconiq_enable?
+            konectoapp_host = ENV["KONECTOAPP_HOST"]
+            # m.content << "<div style='background: #ff4785; padding: 40px 0; width: 100%; text-align: center; margin: 0;'>"\
+            #     "<a style='padding: 15px 50px; background: #00cb75; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students_firstname_and_lastname.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
+            #   "</div>"
+            m.content << "<br><br><a style='padding: 25px 50px; background: #ff4785; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students_firstname_and_lastname.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"
+          end
         end
 
 
