@@ -71,17 +71,16 @@ class ApiController < ApplicationController
                   "<p style='margin-bottom:0px;text-align:left;margin:0px;padding:0px;color:#000;font-family:Verdana,Geneva,sans-serif;font-size:14px;line-height:22px'>"\
                     "Le montant de <strong style='color:#1d92c4'>" + ActionController::Base.helpers.humanized_money(m.amount_to_pay) + " EUR</strong> est à payer"
                     unless m.billing_due_date.blank?
-                      m.content << "avant le <strong style='color:#1d92c4'> <%= m.billing_due_date %></strong>"
+                      m.content << "avant le <strong style='color:#1d92c4'>" + m.billing_due_date + "</strong>"
                     end
                     unless account_number.blank?
-                      m.content << "<br>sur le compte <strong style='color:#1d92c4'><%= account_number %></strong>"
+                      m.content << "<br>sur le compte <strong style='color:#1d92c4'>" + account_number + "</strong>"
                     end
                     unless m.billing_description.blank?
-                      m.content << "<br>avec la communication <strong style='color:#1d92c4'><%= m.billing_description %></strong>."
+                      m.content << "<br>avec la communication <strong style='color:#1d92c4'>" + m.billing_description + "</strong>."
                     end
                     unless m.billing_comment.blank?
-                      m.content << "<br><br>"\
-                      "<%= m.billing_comment %>"\
+                      m.content << "<br><br>" + m.billing_comment
                     end
                   m.content << "</p>"\
                 "</td>"\
