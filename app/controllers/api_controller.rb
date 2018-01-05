@@ -69,7 +69,7 @@ class ApiController < ApplicationController
                 "<td width='30'> </td>"\
                 "<td>"\
                   "<p style='margin-bottom:0px;text-align:left;margin:0px;padding:0px;color:#000;font-family:Verdana,Geneva,sans-serif;font-size:14px;line-height:22px'>"\
-                    "Le montant de <strong style='color:#1d92c4'><%=  humanized_money m.amount_to_pay %> EUR</strong> est à payer"
+                    "Le montant de <strong style='color:#1d92c4'>" + humanized_money m.amount_to_pay + " EUR</strong> est à payer"
                     unless m.billing_due_date.blank?
                       m.content << "avant le <strong style='color:#1d92c4'> <%= m.billing_due_date %></strong>"
                     end
