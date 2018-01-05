@@ -1,4 +1,6 @@
 class ApiController < ApplicationController
+  include ActionView::Base # for humanized_money
+
 
   def messages
     # receive codes corresponding to a student
