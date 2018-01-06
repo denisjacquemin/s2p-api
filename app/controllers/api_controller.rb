@@ -71,7 +71,7 @@ class ApiController < ApplicationController
                   "<p style='margin-bottom:0px;text-align:left;margin:0px;padding:0px;color:#000;font-family:Verdana,Geneva,sans-serif;font-size:14px;line-height:22px'>"\
                     "Le montant de <strong style='color:#1d92c4'>" + ActionController::Base.helpers.humanized_money(m.amount_to_pay) + " EUR</strong> est à payer"
                     unless m.billing_due_date.blank?
-                      m.content << "avant le <strong style='color:#1d92c4'>" + m.billing_due_date + "</strong>"
+                      m.content << "&nbsp;avant le <strong style='color:#1d92c4'>" + m.billing_due_date + "</strong>"
                     end
                     unless account_number.blank?
                       m.content << "<br>sur le compte <strong style='color:#1d92c4'>" + account_number + "</strong>"
@@ -94,7 +94,7 @@ class ApiController < ApplicationController
 
           if m.school.payconiq_enable?
             konectoapp_host = ENV["KONECTOAPP_HOST"]
-            m.content << "<div style='padding: 40px 0; width: 100%; text-align: center; margin: 50px 0 0 0;'>"\
+            m.content << "<div style='margin: 20px 0 0 0;display:inline-block;padding: 40px 0; width: 100%; text-align: center; margin: 50px 0 0 0;'>"\
                 "<a style='padding: 25px 50px; background: #ff4785; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students_firstname_and_lastname.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
               "</div>"
           end
