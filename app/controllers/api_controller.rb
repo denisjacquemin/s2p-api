@@ -94,8 +94,8 @@ class ApiController < ApplicationController
 
           if m.school.payconiq_enable?
             konectoapp_host = ENV["KONECTOAPP_HOST"]
-            m.content << "<div style='margin: 20px 0 0 0;display:inline-block;padding: 40px 0; width: 100%; text-align: center; margin: 50px 0 0 0;'>"\
-                "<a style='padding: 25px 50px; background: #ff4785; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students_firstname_and_lastname.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
+            m.content << "<div style='margin: 0;display:inline-block;padding: 40px 0; width: 100%; text-align: center; margin: 50px 0 0 0;'>"\
+                "<a style='padding: 25px 60px; background: #ff4785; color:#fff;' href='https://#{konectoapp_host}/p/#{m.muuid}?s=#{list_of_students_firstname_and_lastname.compact.join(', ')}#paysection'>Payer #{m.amount_to_pay}&euro;</a>"\
               "</div>"
           end
         end
