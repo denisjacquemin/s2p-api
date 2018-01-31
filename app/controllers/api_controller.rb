@@ -60,7 +60,7 @@ class ApiController < ApplicationController
         # if payment is required append a payconiq button
         if m.include_payment?
           account_number = m.account.account_number unless m.account.nil? or m.account.account_number.blank?
-          m.content << "<p><table cellpadding='0' cellspacing='0' border='0' align='left' style='border-collapse:separate;border:1px solid #1791c8;width:100%'>"\
+          m.content << "<table cellpadding='0' cellspacing='0' border='0' align='left' style='border-collapse:separate;border:1px solid #1791c8;width:100%'>"\
             "<tbody>"\
               "<tr>"\
                 "<td height='15' colspan='3'> </td>"\
@@ -90,7 +90,7 @@ class ApiController < ApplicationController
                 "<td height='15' colspan='3'></td>"\
               "</tr>"\
             "</tbody>"\
-          "</table></p>"
+          "</table>"
 
           if m.school.payconiq_enable?
             konectoapp_host = ENV["KONECTOAPP_HOST"]
