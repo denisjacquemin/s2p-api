@@ -3,6 +3,11 @@ class Student < ApplicationRecord
   belongs_to :school
   has_many :phones, inverse_of: :student
   has_and_belongs_to_many :users
+  has_many :student_emails, inverse_of: :student, dependent: :delete_all
+  accepts_nested_attributes_for :student_emails,
+    :allow_destroy => true,
+    :reject_if => proc { |att| att[:email].blank? }
+
 
   scope :by_codes, ->(codes) { where(code: codes) }
   scope :by_code, ->(code) { where(code: code) }
@@ -20,7 +25,7 @@ class Student < ApplicationRecord
   end
 
   def message_sent_by_email
-    self.sent_message_by_email and self.emails.present?
+    self.sent_message_by_email and self.student_emails.count > 0
   end
 
   def phones_count
