@@ -38,7 +38,7 @@ class ApiController < ApplicationController
         end
 
         # Si form_due_date est passée, retirer formdata du message et ajouter un message disant qu'il est fermé
-        if !m.form_due_date.nil? && m.form_due_date < Date.today
+        if m.formdata.present? && !m.form_due_date.nil? && m.form_due_date < Date.today
           m.formdata = nil
           m.content << "<div>"\
             "<p style='background:yellow; color:red;'>La date limite pour remplir le formulaire est dépassée.</p>"\
