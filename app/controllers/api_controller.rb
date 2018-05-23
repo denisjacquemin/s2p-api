@@ -23,7 +23,6 @@ class ApiController < ApplicationController
 
       # add student firstname targeted for each message
       @messages_with_students = @messages.map { |m|
-
         # finds pdf and append a link to that file in content
         if device.nil? or device.platform != 'Android'
           m.photos.each do |p|
@@ -37,6 +36,14 @@ class ApiController < ApplicationController
             end
           end
         end
+
+        # Si form_due_date est passée, retirer formdata du message et ajouter un message disant qu'il est fermé
+        unless m.form_due_date.nil? && m.form_due_date >= Date.today
+          m.content << "<div>"\
+            "<p style="background:yellow; color:red;">La date limite pour remplir le formulaire est dépassée.</p>"\
+          "</div>"
+        end
+
 
         list_of_students_firstname_and_lastname = []
         # for each message, find all targeted students
