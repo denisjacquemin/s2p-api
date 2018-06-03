@@ -128,7 +128,7 @@ class ApiController < ApplicationController
         m
       }
 
-      render json: @messages_with_students.to_json(:include => [:photos, :forms])
+      render json: @messages_with_students.to_json(:include => [:photos, :forms => {:methods => :created_at_formatted}])
     else
       render json: [].to_json
     end
