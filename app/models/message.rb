@@ -3,6 +3,7 @@ class Message < ApplicationRecord
   belongs_to :school
   belongs_to :author, class_name: "User"
   belongs_to :account
+  has_many :forms, foreign_key: :muuid
 
   has_attachments :photos, maximum: 10
 

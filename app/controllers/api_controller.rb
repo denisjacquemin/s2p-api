@@ -17,7 +17,7 @@ class ApiController < ApplicationController
       duuid = params[:uuid]
       device = Device.find_by_uuid(duuid)
       # find messages based on the groups found
-      @messages =   Message.published.includes(:photo_files).for_app.by_group_and_student_ids(groups_ids, student_ids).order(updated_at: :desc).limit(30) #.includes(:mfiles)
+      @messages =   Message.published.includes(:photo_files, :forms).for_app.by_group_and_student_ids(groups_ids, student_ids).order(updated_at: :desc).limit(30) #.includes(:mfiles)
       students = Student.by_codes(student_codes)
       groups = Group.by_codes(group_codes)
 
@@ -121,10 +121,10 @@ class ApiController < ApplicationController
         }
         m.signature.merge!(email: m.author.reply_to) if m.author.display_email_address
 
-        unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
-          forms_submitted = Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
-          m.forms = forms_submitted
-        end
+        # unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
+        #   forms_submitted = m.forms #Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
+        #   m.forms = forms_submitted
+        # end
         m
       }
 
