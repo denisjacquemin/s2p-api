@@ -125,10 +125,11 @@ class ApiController < ApplicationController
         #   forms_submitted = m.forms #Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
         #   m.forms = forms_submitted
         # end
+        m.forms = m.forms.map {|f| f.created_at_formatted}
         m
       }
 
-      render json: @messages_with_students.to_json()
+      render json: @messages_with_students.to_json(:include => [:photos])
     else
       render json: [].to_json
     end
