@@ -121,10 +121,10 @@ class ApiController < ApplicationController
         }
         m.signature.merge!(email: m.author.reply_to) if m.author.display_email_address
 
-        # unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
-        #   forms_submitted = m.forms #Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
-        #   m.forms = forms_submitted
-        # end
+        unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
+          forms_submitted = m.forms #Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
+          m.forms = forms_submitted
+        end
         # unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
         #   forms_submitted = m.forms.map {|f| I18n.l(f.created_at.in_time_zone, format: :long)}
         #   m.forms = forms_submitted
@@ -132,7 +132,9 @@ class ApiController < ApplicationController
         m
       }
 
-      render json: @messages_with_students.to_json(:include => [:photos, :forms => {only: :created_at}])
+      # render json: @messages_with_students.to_json(:include => [:photos, :forms => {only: :created_at}])
+
+      render json: @messages_with_students.to_json(:include => [:photos])
 
     else
       render json: [].to_json

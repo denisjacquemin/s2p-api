@@ -3,16 +3,16 @@ class Message < ApplicationRecord
   belongs_to :school
   belongs_to :author, class_name: "User"
   belongs_to :account
-  has_many :forms, foreign_key: :muuid, primary_key: :muuid
+  # has_many :forms, foreign_key: :muuid, primary_key: :muuid
 
   has_attachments :photos, maximum: 10
 
   monetize :amount_to_pay_cents
 
   # http://stackoverflow.com/questions/6892044/add-virtual-attribute-to-json-output
-  attr_accessor :student_names, :signature, :publish_date
+  attr_accessor :student_names, :signature, :forms, :publish_date
   def attributes
-    super.merge('student_names' => self.student_names, 'signature' => self.signature, 'publish_date' => self.publish_date)
+    super.merge('student_names' => self.student_names, 'signature' => self.signature, 'forms' => self.forms, 'publish_date' => self.publish_date)
   end
 
   def publish_date
