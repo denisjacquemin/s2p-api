@@ -125,16 +125,14 @@ class ApiController < ApplicationController
         #   forms_submitted = m.forms #Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
         #   m.forms = forms_submitted
         # end
-        unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
-          forms_submitted = m.forms.map {|f| I18n.l(f.created_at.in_time_zone, format: :long)}
-          m.forms = forms_submitted
-        end
-        forms_submitted
-        m.forms = m.forms.map {|f| f.created_at_formatted}
+        # unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
+        #   forms_submitted = m.forms.map {|f| I18n.l(f.created_at.in_time_zone, format: :long)}
+        #   m.forms = forms_submitted
+        # end
         m
       }
 
-      render json: @messages_with_students.to_json(:include => [:photos])
+      render json: @messages_with_students.to_json(:include => {:photos, :forms => {:only => created_at}})
     else
       render json: [].to_json
     end
