@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 ruby "2.3.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>= 5.0.0.rc1', '< 5.1'
+gem 'active_model_serializers'
 
 gem 'pg'
 # Use Puma as the app server
@@ -26,6 +27,9 @@ gem 'money-rails', '~>1'
 
 gem "algoliasearch-rails"
 
+gem "devise"
+gem 'simple_token_authentication'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -44,6 +48,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'dotenv-rails'
+  gem 'active_record_query_trace'
 end
 
 gem 'rails_12factor', group: :production
