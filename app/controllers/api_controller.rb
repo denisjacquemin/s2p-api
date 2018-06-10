@@ -115,7 +115,6 @@ class ApiController < ApplicationController
         #   logo_url: m.school.file_url
         # }
         # m.signature.merge!(email: m.author.reply_to) if m.author.display_email_address
-        byebug
         unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
           forms_submitted = Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
           m.forms = forms_submitted
