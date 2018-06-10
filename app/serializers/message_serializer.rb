@@ -7,7 +7,9 @@ class MessageSerializer < ActiveModel::Serializer
         id: photo.id,
         format: photo.format,
         resource_type: photo.resource_type,
-        public_id: photo.public_id
+        public_id: photo.public_id,
+        width: photo.width,
+        height: photo.height
       }
     end
   end
