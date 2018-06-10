@@ -7,19 +7,17 @@ class ApiController < ApplicationController
 
       codes = params[:codes].map {|c| c.downcase}
       student_codes = codes.select {|code| code.start_with?('s')} # get all students' codes from querystring
-      group_codes = codes.select {|code| code.start_with?('g')}
 
       # build message.groups list based on code received (group's code or student's code)
-      groups_ids = build_groups_ids(student_codes, group_codes)
+      groups_ids = build_groups_ids(student_codes)
 
       student_ids = build_students_ids(student_codes)
 
       duuid = params[:uuid]
       device = Device.find_by_uuid(duuid)
       # find messages based on the groups found
-      @messages =   Message.published.includes(:photo_files).for_app.by_group_and_student_ids(groups_ids, student_ids).order(updated_at: :desc).limit(30) #.includes(:mfiles)
+      @messages =   Message.published.includes(:photo_files, :school, :author).for_app.by_group_and_student_ids(groups_ids, student_ids).order(updated_at: :desc).limit(30) #.includes(:mfiles)
       students = Student.by_codes(student_codes)
-      groups = Group.by_codes(group_codes)
 
       # add student firstname targeted for each message
       @messages_with_students = @messages.map { |m|
@@ -60,9 +58,6 @@ class ApiController < ApplicationController
 
           list_of_students_firstname_and_lastname <<  s.fullname if (gic or s_contained_in_m)
           s.firstname if (gic or s_contained_in_m)
-        }
-        list_of_groups = groups.collect { |g|
-          g.name if (m.groups.include? g.id)
         }
 
         # if payment is required append a payconiq button
@@ -109,18 +104,18 @@ class ApiController < ApplicationController
         end
 
 
-        m.student_names = list_of_students.compact + list_of_groups.compact
-        m.signature = {
-          fullname: m.author.fullname,
-          function: m.author.function,
-          schoolname: m.school.name,
-          address: m.school.address,
-          url: m.school.url,
-          phone: m.school.phone,
-          logo_url: m.school.file_url
-        }
-        m.signature.merge!(email: m.author.reply_to) if m.author.display_email_address
-
+        m.student_names = list_of_students.compact
+        # m.signature = {
+        #   fullname: m.author.fullname,
+        #   function: m.author.function,
+        #   schoolname: m.school.name,
+        #   address: m.school.address,
+        #   url: m.school.url,
+        #   phone: m.school.phone,
+        #   logo_url: m.school.file_url
+        # }
+        # m.signature.merge!(email: m.author.reply_to) if m.author.display_email_address
+        byebug
         unless m.formdata.nil? or m.muuid.nil? or duuid.nil?
           forms_submitted = Form.by_muuid(m.muuid).by_duuid(duuid).pluck(:created_at).map{|d| I18n.l(d.in_time_zone, format: :long)}
           m.forms = forms_submitted
@@ -134,7 +129,8 @@ class ApiController < ApplicationController
 
       # render json: @messages_with_students.to_json(:include => [:photos, :forms => {only: :created_at}])
 
-      render json: @messages_with_students.to_json(:include => [:photos])
+      #render json: @messages_with_students.to_json(:include => [:photos])
+      render json: @messages_with_students
 
     else
       render json: [].to_json
@@ -311,11 +307,9 @@ class ApiController < ApplicationController
   end
 
   private
-    def build_groups_ids(student_codes, group_codes)
-      students = Student.by_codes(student_codes)
-      groups = Group.by_codes(group_codes)
-      groups_ids = students.map{ |s| s.groups } + groups.pluck(:id)
-      groups_ids.flatten
+    def build_groups_ids(student_codes)
+      groups_ids = Student.by_codes(student_codes).pluck(:groups)
+      groups_ids.flatten.compact.uniq
     end
 
     def build_students_ids(student_codes)
