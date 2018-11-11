@@ -16,7 +16,7 @@ class MessageSerializer < ActiveModel::Serializer
 
   def signature
     signature = {
-      fullname: object.author.fullname,
+      fullname: object.custom_author,
       function: object.author.function,
       schoolname: object.school.name,
       address: object.school.address,
