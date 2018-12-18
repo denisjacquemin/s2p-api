@@ -1,5 +1,5 @@
 class MessageSerializer < ActiveModel::Serializer
-  attributes :id, :title, :publish_date, :school_id, :content, :student_names, :muuid, :forms, :formdata, :signature, :photos
+  attributes :id, :title, :publish_date, :mtype, :school_id, :content, :student_names, :muuid, :forms, :formdata, :signature, :photos
 
   def photos
     photos = object.photos.map do |photo|
