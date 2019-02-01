@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-ruby "2.3.0"
+ruby "2.4.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '>= 5.0.0.rc1', '< 5.1'
+gem 'rails', '>= 5.1.0'
 gem 'active_model_serializers'
 
 gem 'pg'
@@ -27,8 +27,8 @@ gem 'money-rails', '~>1'
 
 gem "algoliasearch-rails"
 
-gem "devise"
-gem 'simple_token_authentication'
+# gem "devise"
+# gem 'simple_token_authentication'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

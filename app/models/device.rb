@@ -1,8 +1,7 @@
 class Device < ApplicationRecord
 
   validates :uuid, uniqueness: true
-
-  after_save :update_followers, if: "codes_changed?"
+  after_save :update_followers, if: -> {codes_changed?}
   after_destroy :update_followers
   scope :by_codes, ->(codes) { where("codes && ARRAY[?]::varchar[]", codes) }
 
