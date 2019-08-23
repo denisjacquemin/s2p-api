@@ -16,8 +16,15 @@ class ApiController < ApplicationController
       duuid = params[:uuid]
       device = Device.find_by_uuid(duuid)
       # find messages based on the groups found
+
       @messages =   Message.published.includes(:photo_files, :school, :author).for_app.by_group_and_student_ids(groups_ids, student_ids).order(updated_at: :desc).limit(30) #.includes(:mfiles)
       students = Student.by_codes(student_codes)
+
+      # removes messages after not before limit
+      @messages = @messages.to_a.delete_if { |m| 
+        not_before_limit = Date.new(Date.today.year, m.school.message_month_limit, m.school.message_day_limit)
+        m.publish_date < not_before_limit
+      }
 
       # add student firstname targeted for each message
       @messages_with_students = @messages.map { |m|
