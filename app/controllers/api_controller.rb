@@ -21,13 +21,18 @@ class ApiController < ApplicationController
       students = Student.by_codes(student_codes)
 
       # removes messages after not before limit
+      
       @messages = @messages.to_a.delete_if { |m| 
+        unless m.school.activate_message_date_limit
+          false
+        end
+
+        
         if m.school.activate_message_date_limit
           not_before_limit = Date.new(Date.today.year, m.school.message_month_limit, m.school.message_day_limit)
-          m.publish_date < not_before_limit
-        else
-          false
-        end 
+          m.publish_date < not_before_limit 
+        end
+
       }
 
       # add student firstname targeted for each message
