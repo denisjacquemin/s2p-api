@@ -29,7 +29,7 @@ class ApiController < ApplicationController
 
         
         if m.school.activate_message_date_limit
-          not_before_limit = Date.new(Date.today.year, m.school.message_month_limit, m.school.message_day_limit)
+          not_before_limit = Date.new(Date.today.year, m.school.message_month_limit, m.school.message_day_limit).yield_self{ |date| date.advance(years: (date > Date.today ? -1 : 0)) }
           m.publish_date < not_before_limit 
         end
 
