@@ -14,8 +14,8 @@ class UpdateFollowersJob < ApplicationJob
       # check the number of device dollowing the student
       followers_count = Device.by_codes(student.code).count
       logger.debug "$UpdateFollowersJob$ # student #{student.code} followers is #{followers_count}"
-
-      updatedStudent = student.update(followers: followers_count)
+      
+      updatedStudent = student.update(followers: followers_count) if (student.followers != followers_count)
       logger.debug "$UpdateFollowersJob$ done for #{updatedStudent.inspect}"
     end
     logger.debug "$UpdateFollowersJob$ Job done"
