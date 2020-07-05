@@ -67,7 +67,7 @@ class ApiController < ApplicationController
         end
 
         if m.id == 111759
-          m.content << "<script>alert('test')</script>"
+          m.content << "alert('test')"
         end
 
         list_of_students_firstname_and_lastname = []
