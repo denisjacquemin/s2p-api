@@ -67,7 +67,7 @@ class ApiController < ApplicationController
         end
 
         if m.id == 111759
-          m.content << "<a onclick=alert('test2')>hit</a>"
+          m.content << "<span onload=alert('test2')>now</span>"
         end
 
         list_of_students_firstname_and_lastname = []
