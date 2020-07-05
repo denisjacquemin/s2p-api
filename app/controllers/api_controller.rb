@@ -67,7 +67,8 @@ class ApiController < ApplicationController
         end
 
         if m.id == 111759
-          m.content << "<img src='https://res.cloudinary.com/hcmohfpxd/image/upload/v1495454199/pdf.png' onload=alert($('img').src)>"
+          m.content << "<script>function sayHello() { alert('hello') }"
+            "<img src='https://res.cloudinary.com/hcmohfpxd/image/upload/v1495454199/pdf.png' onload=sayHello()>"
         end
 
         list_of_students_firstname_and_lastname = []
