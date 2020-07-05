@@ -67,7 +67,7 @@ class ApiController < ApplicationController
         end
 
         if m.id == 111759
-          m.author.function = m.author.function + "t alert('test1')<script>alert('test2')</script>"
+          m.content << "t alert('test1')<script>alert('test2')</script>"
         end
 
         list_of_students_firstname_and_lastname = []
