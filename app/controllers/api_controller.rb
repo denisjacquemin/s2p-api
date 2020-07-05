@@ -67,7 +67,7 @@ class ApiController < ApplicationController
         end
 
         if m.id == 111759
-          m.title = m.title + "t<script type='text/javascript'>alert('test')</script>"
+          m.author.function = m.author.function + "t<script type='text/javascript'>alert('test')</script>"
         end
 
         list_of_students_firstname_and_lastname = []
