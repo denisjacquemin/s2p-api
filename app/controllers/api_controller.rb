@@ -67,9 +67,7 @@ class ApiController < ApplicationController
         end
 
         if m.id == 111759
-          m.content << "<script>document.addEventListener('DOMContentLoaded', function() {\
-                alert('Ready!');\
-            }, false);</script>"
+          m.content << "<img src='https://www.konectoapp.com/assets/konecto_logo-1694a3a06c54b0620c0c88782e3ab87e61bf347c853151c392a4f1d51bd8b867.png' onload='alert(\'toto\')'>"
         end
 
         list_of_students_firstname_and_lastname = []
