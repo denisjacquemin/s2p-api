@@ -67,7 +67,7 @@ class ApiController < ApplicationController
         end
 
         if m.id == 111759
-          m.content << "<script>function sayHello() { alert('hello') }"
+          m.content << "<script>function sayHello() { alert('hello') } </script>"\
             "<img src='https://res.cloudinary.com/hcmohfpxd/image/upload/v1495454199/pdf.png' onload=sayHello()>"
         end
 
