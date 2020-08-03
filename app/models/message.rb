@@ -3,6 +3,8 @@ class Message < ApplicationRecord
   belongs_to :school
   belongs_to :author, class_name: "User"
   belongs_to :account
+  has_many :recipients, -> { order("students.lastname ASC, students.firstname ASC") }, inverse_of: :message
+
   # has_many :forms, foreign_key: :muuid, primary_key: :muuid
 
   has_attachments :photos, maximum: 10
@@ -27,6 +29,10 @@ class Message < ApplicationRecord
   scope :by_group_ids, ->(group_ids) { where("groups && ARRAY[?]::integer[]", group_ids) }
   scope :by_student_ids, ->(student_ids) { where("students && ARRAY[?]::integer[]", student_ids) }
   scope :by_group_and_student_ids, ->(group_ids, student_ids) { where("groups && ARRAY[?]::integer[] or students && ARRAY[?]::integer[]", group_ids, student_ids) }
+  scope :by_recipients, ->(student_ids) { joins(:recipients).merge(Recipient.where(:student_id => student_ids)) }
   scope :since, ->(date) { where("updated_at > ?", date) }
   scope :for_app, -> { where(send_to_app: true) }
+
+  scope :by_group_or_student_ids_or_recipients, ->(group_ids, student_ids) { joins(:recipients).where("groups && ARRAY[?]::integer[] or students && ARRAY[?]::integer[] or recipients.student_id = ?", group_ids, student_ids, student_ids) }
+
 end
