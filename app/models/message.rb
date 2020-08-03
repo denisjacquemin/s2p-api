@@ -33,6 +33,6 @@ class Message < ApplicationRecord
   scope :since, ->(date) { where("updated_at > ?", date) }
   scope :for_app, -> { where(send_to_app: true) }
 
-  scope :by_group_or_student_ids_or_recipients, ->(group_ids, student_ids) { joins(:recipients).where("groups && ARRAY[?]::integer[] or students && ARRAY[?]::integer[] or recipients.student_id = ?", group_ids, student_ids, student_ids) }
+  scope :by_group_or_student_ids_or_recipients, ->(group_ids, student_ids) { joins("LEFT JOIN recipients ON recipients.message_id = messages.id").where("groups && ARRAY[?]::integer[] or students && ARRAY[?]::integer[] or recipients.student_id = ?", group_ids, student_ids, student_ids) }
 
 end
