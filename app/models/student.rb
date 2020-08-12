@@ -17,12 +17,22 @@ class Student < ApplicationRecord
   include AlgoliaSearch
 
   algoliasearch synchronous: false do
-    attribute :firstname, :lastname, :school_id, :classroom, :level, :code, :followers, :message_sent_by_email, :phones_count
-    attributesToIndex [:firstname, :lastname, :school_id, :classroom, :level, :code]
-    attributesForFaceting ['searchable(classroom)', 'searchable(level)']
+    attribute :firstname, :lastname, :school_id, :classroom, :level, :code, :followers, :message_sent_by_email, :phones_count, :groups_to_index, :groups_to_index_ids
+    attributesToIndex [:firstname, :lastname, :school_id, :classroom, :level, :code, :groups_to_index]
+    attributesForFaceting ['searchable(classroom)', 'searchable(level)', 'searchable(groups_to_index)', 'filterOnly(groups_to_index_ids)']
     customRanking ['asc(level)', 'asc(lastname)']
     typoTolerance :false
   end
+
+
+  def groups_to_index
+    Group.where("id IN (?)", self.groups).pluck(:name)
+  end
+
+  def groups_to_index_ids
+    Group.where("id IN (?)", self.groups).pluck(:id)
+  end
+
 
   def message_sent_by_email
     self.sent_message_by_email and self.student_emails.count > 0
