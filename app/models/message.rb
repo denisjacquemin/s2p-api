@@ -32,6 +32,8 @@ class Message < ApplicationRecord
   scope :by_recipients, ->(student_ids) { joins("LEFT JOIN recipients ON recipients.message_id = messages.id").where("recipients.student_id" => student_ids) }
   scope :since, ->(date) { where("updated_at > ?", date) }
   scope :for_app, -> { where(send_to_app: true) }
+  scope :not_deleted, -> { where(deleted: false) }
+
 
   scope :by_group_or_student_ids_or_recipients, ->(group_ids, student_ids) { joins("LEFT JOIN recipients ON recipients.message_id = messages.id").where("recipients.student_id IN (?) OR groups && ARRAY[?]::integer[] or students && ARRAY[?]::integer[]", student_ids, group_ids, student_ids) }
 end
