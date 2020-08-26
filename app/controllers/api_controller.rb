@@ -74,7 +74,7 @@ class ApiController < ApplicationController
         list_of_students_firstname_and_lastname = []
         # for each message, find all targeted students
 
-        recipients_student_ids = recipients.pluck(:student_id)
+        recipients_student_ids = m.recipients.pluck(:student_id)
 
         list_of_students = students.collect { |s|
           # for one message check each students

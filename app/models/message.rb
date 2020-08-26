@@ -3,7 +3,7 @@ class Message < ApplicationRecord
   belongs_to :school
   belongs_to :author, class_name: "User"
   belongs_to :account
-  has_many :recipients, -> { order("students.lastname ASC, students.firstname ASC") }, inverse_of: :message
+  has_many :recipients
 
   # has_many :forms, foreign_key: :muuid, primary_key: :muuid
 
