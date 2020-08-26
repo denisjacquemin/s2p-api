@@ -73,6 +73,9 @@ class ApiController < ApplicationController
 
         list_of_students_firstname_and_lastname = []
         # for each message, find all targeted students
+
+        recipients_student_ids = recipients.pluck(:student_id)].compact.reduce([], :|)
+
         list_of_students = students.collect { |s|
           # for one message check each students
           # if student's groups have at least one group in common with message's groups
@@ -82,8 +85,10 @@ class ApiController < ApplicationController
 
           s_contained_in_m = false
           s_contained_in_m = m.students.include?(s.id) if (m.students.present?)
+          
+          s_contained_in_recipients = recipients_student_ids&.include?(s.id)
 
-          list_of_students_firstname_and_lastname <<  s.fullname if (gic or s_contained_in_m)
+          list_of_students_firstname_and_lastname <<  s.fullname if (gic or s_contained_in_m or s_contained_in_recipients)
           s.firstname if (gic or s_contained_in_m)
         }
 
