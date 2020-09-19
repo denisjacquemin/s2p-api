@@ -17,23 +17,31 @@ class ApiController < ApplicationController
       device = Device.find_by_uuid(duuid)
       # find messages based on the groups found
 
-      @messages =   Message.published.not_deleted.includes(:photo_files, :school, :author).for_app.by_group_or_student_ids_or_recipients(groups_ids, student_ids).order(updated_at: :desc).limit(45) #.includes(:mfiles)
+      # @messages = Message.published.not_deleted.includes(:photo_files, :school, :author).for_app.by_group_or_student_ids_or_recipients(groups_ids, student_ids).order(updated_at: :desc).limit(45) #.includes(:mfiles)
+
+      # @messagesToSort = Message.published.not_deleted.includes(:photo_files, :school, :author).for_app.by_group_and_student_ids(groups_ids, student_ids).limit(45).uniq { |m| m.id } #.includes(:mfiles)
+      # @messagesToSort += Message.published.not_deleted.includes(:photo_files, :school, :author).for_app.by_recipients(student_ids).limit(45).uniq { |m| m.id } #.includes(:mfiles)
+
+      @messagesIds = findMessagesIds(groups_ids, student_ids)
+
+
+      @messages = Message.where(id: @messagesIds).includes(:photo_files, :school, :author).order(updated_at: :desc).limit(30)# get full objects
       students = Student.by_codes(student_codes)
 
       # removes messages after not before limit
       
-      @messages = @messages.to_a.delete_if { |m| 
-        unless m.school.activate_message_date_limit
-          false
-        end
+      # @messages = @messages.to_a.delete_if { |m| 
+      #   unless m.school.activate_message_date_limit
+      #     false
+      #   end
 
         
-        if m.school.activate_message_date_limit
-          not_before_limit = Date.new(Date.today.year, m.school.message_month_limit, m.school.message_day_limit).yield_self{ |date| date.advance(years: (date > Date.today ? -1 : 0)) }
-          m.publish_date < not_before_limit 
-        end
+      #   if m.school.activate_message_date_limit
+      #     not_before_limit = Date.new(Date.today.year, m.school.message_month_limit, m.school.message_day_limit).yield_self{ |date| date.advance(years: (date > Date.today ? -1 : 0)) }
+      #     m.publish_date < not_before_limit 
+      #   end
 
-      }
+      # }
 
       # add student firstname targeted for each message
       @messages_with_students = @messages.map { |m|
@@ -338,6 +346,32 @@ class ApiController < ApplicationController
   end
 
   private
+
+    def findMessagesIds(groups_ids, student_ids)
+      
+      ids = Message.published.not_deleted.for_app.by_group_and_student_ids(groups_ids, student_ids).limit(45).pluck(:id, :updated_at, :school_id) #.includes(:mfiles)
+      ids += Message.published.not_deleted.for_app.by_recipients(student_ids).limit(45).pluck(:id, :updated_at, :school_id)
+      ids.uniq!{|e| e[0]} # remove duplicates ids
+
+      ids.reject! { |m| # removes messages if necessary
+        school = School.find m[2]
+
+        unless school.activate_message_date_limit
+          false
+        end
+
+        
+        if school.activate_message_date_limit
+          not_before_limit = Date.new(Date.today.year, school.message_month_limit, school.message_day_limit).yield_self{ |date| date.advance(years: (date > Date.today ? -1 : 0)) }
+          m[1] < not_before_limit 
+        end
+
+      }
+      ids.map {|el| el[0]} # now return it
+
+    end
+
+
     def build_groups_ids(student_codes)
       groups_ids = Student.by_codes(student_codes).pluck(:groups)
       groups_ids.flatten.compact.uniq
