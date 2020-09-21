@@ -24,7 +24,6 @@ class ApiController < ApplicationController
 
       @messagesIds = findMessagesIds(groups_ids, student_ids)
 
-
       @messages = Message.where(id: @messagesIds).includes(:photo_files, :school, :author).order(updated_at: :desc).limit(30)# get full objects
       students = Student.by_codes(student_codes)
 
@@ -349,13 +348,13 @@ class ApiController < ApplicationController
 
     def findMessagesIds(groups_ids, student_ids)
       
-      ids = Message.published.not_deleted.for_app.by_group_and_student_ids(groups_ids, student_ids).limit(45).pluck(:id, :updated_at, :school_id) #.includes(:mfiles)
-      ids += Message.published.not_deleted.for_app.by_recipients(student_ids).limit(45).pluck(:id, :updated_at, :school_id)
+      ids = Message.published.not_deleted.for_app.by_group_and_student_ids(groups_ids, student_ids).order(updated_at: :desc).limit(45).pluck(:id, :updated_at, :school_id) #.includes(:mfiles)
+      ids += Message.published.not_deleted.for_app.by_recipients(student_ids).order(updated_at: :desc).limit(45).pluck(:id, :updated_at, :school_id)
       ids.uniq!{|e| e[0]} # remove duplicates ids
 
       ids.reject! { |m| # removes messages if necessary
         school = School.find m[2]
-
+        
         unless school.activate_message_date_limit
           false
         end
