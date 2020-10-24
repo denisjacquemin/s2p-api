@@ -335,7 +335,7 @@ class ApiController < ApplicationController
   end
 
   def code_label
-    code = params[:code].downcase
+    code = params[:code].strip.downcase
     code_label = Student.by_codes(code)
     message = 'Code erroné'
     if code_label.first N7ljVx
