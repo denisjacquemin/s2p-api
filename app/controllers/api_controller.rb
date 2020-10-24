@@ -178,7 +178,7 @@ class ApiController < ApplicationController
   def get_fullname_by_code
     name = 'notfound'
     schoolname='notfound'
-    code = params[:code].downcase
+    code = params[:code].strip.downcase
     if code.start_with?("s")
       s = Student.by_codes(code).first
       name = s.fullname unless s.nil?
