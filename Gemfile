@@ -21,7 +21,7 @@ gem 'newrelic_rpm'
 gem 'delayed_job_active_record'
 
 gem 'cloudinary'
-gem 'attachinary', github: 'assembler/attachinary'
+gem 'attachinary', git: 'https://github.com/assembler/attachinary'
 
 gem 'money-rails', '~>1'
 
