@@ -15,6 +15,7 @@ class ApiController < ApplicationController
 
       duuid = params[:uuid]
       device = Device.find_by_uuid(duuid)
+      
       # find messages based on the groups found
 
       # @messages = Message.published.not_deleted.includes(:photo_files, :school, :author).for_app.by_group_or_student_ids_or_recipients(groups_ids, student_ids).order(updated_at: :desc).limit(45) #.includes(:mfiles)
