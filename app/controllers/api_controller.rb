@@ -249,14 +249,16 @@ class ApiController < ApplicationController
       allValidAnswerNames = formJSON.map {|question| question["name"]}.compact.uniq
 
       j.select! {|answer| allValidAnswerNames.include?(answer["name"])} 
-      j.prepend({label: 'horodateur', name: 'horodateur', value: I18n.l(Time.now.to_datetime().in_time_zone, format: :excel)})
+      unless j.empty?
+        j.prepend({label: 'horodateur', name: 'horodateur', value: I18n.l(Time.now.to_datetime().in_time_zone, format: :excel)})
+        @form = Form.new(duuid: params[:uuid], muuid: params[:muuid], formdata: JSON.generate(j))
 
-
-      @form = Form.new(duuid: params[:uuid], muuid: params[:muuid], formdata: JSON.generate(j))
-
-      if @form.save
-        render json: { success: true }
-      else
+        if @form.save
+          render json: { success: true }
+        else
+          render json: { success: false }
+        end
+      else 
         render json: { success: false }
       end
     else 
