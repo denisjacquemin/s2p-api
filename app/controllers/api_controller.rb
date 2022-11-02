@@ -8,10 +8,21 @@ class ApiController < ApplicationController
       codes = params[:codes].map {|c| c.downcase}
       student_codes = codes.select {|code| code.start_with?('s')} # get all students' codes from querystring
 
-      # build message.groups list based on code received (group's code or student's code)
-      groups_ids = build_groups_ids(student_codes)
 
-      student_ids = build_students_ids(student_codes)
+      students_by_codes = Student.by_codes(student_codes)
+
+      # remove student for which the activate_transition_message is true
+      show_transition_message = false
+      transition_message = ''
+      
+      students = students_by_codes.select do |s| 
+        show_transition_message = true if s.school.activate_transition_message 
+        transition_message = s.school.transition_message
+        # later in the code, add transition_message to 'messages' list
+        ! s.school.activate_transition_message
+      end
+      student_ids = students.pluck(:id)
+      groups_ids = students.pluck(:groups).flatten.compact.uniq
 
       duuid = params[:uuid]
       device = Device.find_by_uuid(duuid)
@@ -26,7 +37,6 @@ class ApiController < ApplicationController
       @messagesIds = findMessagesIds(groups_ids, student_ids)
 
       @messages = Message.where(id: @messagesIds).includes(:photo_files, :school, :author).order(updated_at: :desc).limit(30)# get full objects
-      students = Student.by_codes(student_codes)
 
       # removes messages after not before limit
       
@@ -42,6 +52,7 @@ class ApiController < ApplicationController
       #   end
 
       # }
+
 
       # add student firstname targeted for each message
       @messages_with_students = @messages.map { |m|
@@ -74,15 +85,13 @@ class ApiController < ApplicationController
             "border-radius: .25rem;transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;color: #fff;background-color: #6c757d;border-color: #6c757d;overflow: visible;    padding: .25rem .5rem;font-size: .875rem;line-height: 1.5;border-radius: .2rem;'>Traduire</a></div>"
         end
 
-        if m.id == 111759
-          m.content << "<script>function sayHello() { alert('hello') } </script>"\
-            "<img src='https://res.cloudinary.com/hcmohfpxd/image/upload/v1495454199/pdf.png' onload=sayHello()>"
-        end
+ 
 
         list_of_students_firstname_and_lastname = []
         # for each message, find all targeted students
 
         recipients_student_ids = m.recipients.pluck(:student_id)
+
 
         list_of_students = students.collect { |s|
           # for one message check each students
@@ -165,7 +174,10 @@ class ApiController < ApplicationController
         # end
         m
       }
-
+      if show_transition_message
+        transition_message = Message.new(content: transition_message)
+        @messages_with_students.unshift(transition_message)
+      end
       # render json: @messages_with_students.to_json(:include => [:photos, :forms => {only: :created_at}])
 
       #render json: @messages_with_students.to_json(:include => [:photos])

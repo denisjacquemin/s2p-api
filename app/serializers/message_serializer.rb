@@ -16,15 +16,15 @@ class MessageSerializer < ActiveModel::Serializer
 
   def signature
     signature = {
-      fullname: object.custom_author || object.author.fullname,
-      function: object.author.function,
-      schoolname: object.school.name,
-      address: object.school.address,
-      url: object.school.url,
-      phone: object.school.phone,
-      logo_url: object.school.file_url
+      fullname: object.custom_author || object&.author&.fullname,
+      function: object&.author&.function,
+      schoolname: object&.school&.name,
+      address: object&.school&.address,
+      url: object&.school&.url,
+      phone: object&.school&.phone,
+      logo_url: object&.school&.file_url
     }
-    signature.merge!(email: object.author.reply_to) if object.author.display_email_address
+    signature.merge!(email: object.author.reply_to) if object&.author&.display_email_address
 
     return signature
   end
